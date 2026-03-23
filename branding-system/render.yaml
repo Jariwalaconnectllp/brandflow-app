@@ -1,0 +1,42 @@
+services:
+  # ── Backend API ──────────────────────────────────────
+  - type: web
+    name: brandflow-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: brandflow-mongodb
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://brandflow-frontend.onrender.com   # ← update after first deploy
+      - key: PORT
+        value: 10000
+
+  # ── Frontend Static Site ─────────────────────────────
+  - type: web
+    name: brandflow-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://brandflow-backend.onrender.com/api  # ← update after first deploy
+
+databases:
+  - name: brandflow-mongodb
+    plan: free
+    databaseName: branding_system

@@ -1,0 +1,83 @@
+.loadWrap { display: flex; align-items: center; justify-content: center; min-height: 300px; }
+
+.page { display: flex; flex-direction: column; gap: 20px; max-width: 1200px; }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.title { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+.subtitle { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cityList { display: flex; flex-direction: column; gap: 8px; }
+.cityRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cityRow:last-child { border-bottom: none; }
+.cityRank { font-size: 12px; font-weight: 700; color: var(--text-muted); font-family: var(--font-mono); min-width: 24px; }
+.cityName { flex: 1; font-size: 14px; font-weight: 500; }
+.cityCount { font-size: 12px; color: var(--text-secondary); }
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  transition: gap 0.15s;
+}
+.viewAll:hover { gap: 8px; }
+
+.requestList { display: flex; flex-direction: column; gap: 2px; }
+.requestRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  transition: background 0.15s;
+  flex-wrap: wrap;
+}
+.requestRow:hover { background: var(--bg-secondary); }
+
+.reqLeft { display: flex; flex-direction: column; gap: 3px; }
+.reqTitle { font-size: 14px; font-weight: 500; }
+
+.reqRight { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+@media (max-width: 900px) { .content { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .requestRow { flex-direction: column; align-items: flex-start; }
+  .reqRight { flex-direction: row; }
+}

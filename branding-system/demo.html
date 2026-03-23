@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BrandFlow — Branding Process Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f1a;--bg2:#13162a;--bgc:#181c35;--bgh:#1e2340;
+  --border:rgba(255,255,255,0.08);--borderl:rgba(255,255,255,0.15);
+  --txt:#f0f2ff;--txt2:#8890b5;--txt3:#5a6080;
+  --acc:#e8c547;--accd:rgba(232,197,71,0.15);--acch:#f0d060;
+  --blu:#4f8ef7;--blud:rgba(79,142,247,0.15);
+  --grn:#3ecf8e;--grnd:rgba(62,207,142,0.12);
+  --red:#f56565;--redd:rgba(245,101,101,0.12);
+  --org:#f6ad55;--orgd:rgba(246,173,85,0.12);
+  --pur:#b794f4;--purd:rgba(183,148,244,0.12);
+  --tel:#4fd1c5;--teld:rgba(79,209,197,0.12);
+  --r:8px;--rl:14px;--rxl:20px;
+}
+html,body{height:100%;font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--borderl);border-radius:3px}
+
+/* ── LAYOUT ── */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:width .25s}
+.sidebar.collapsed{width:60px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;gap:12px}
+.content{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+
+/* ── SIDEBAR PARTS ── */
+.logo{display:flex;align-items:center;gap:10px;padding:18px 14px;border-bottom:1px solid var(--border)}
+.logo-icon{width:32px;height:32px;background:var(--acc);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-text{font-size:17px;font-weight:700;letter-spacing:-0.03em;white-space:nowrap}
+.user-chip{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.ava{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.user-meta{display:flex;flex-direction:column;overflow:hidden}
+.u-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u-role{font-size:11px;font-weight:500}
+nav{flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-i{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--r);color:var(--txt2);cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;white-space:nowrap}
+.nav-i:hover{background:var(--bgc);color:var(--txt)}
+.nav-i.active{background:var(--accd);color:var(--acc)}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;position:relative}
+.nav-lbl{flex:1}
+.notif-pip{position:absolute;top:-4px;right:-4px;width:14px;height:14px;background:var(--red);border-radius:7px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff}
+.role-switcher{padding:10px 8px;border-top:1px solid var(--border)}
+.rs-label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;padding:0 4px}
+.rs-btn{display:block;width:100%;text-align:left;padding:7px 11px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;border:none;margin-bottom:2px;transition:all .15s;background:transparent;color:var(--txt2)}
+.rs-btn.active{font-weight:600}
+.rs-btn:hover{background:var(--bgc)}
+
+/* ── TOPBAR ── */
+.topbar-left{display:flex;align-items:center;gap:12px}
+.menu-btn{background:transparent;color:var(--txt2);border:none;padding:6px;border-radius:var(--r);cursor:pointer;font-size:18px;line-height:1}
+.menu-btn:hover{background:var(--bgc);color:var(--txt)}
+.page-title{font-size:16px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.role-tag{font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:.04em}
+
+/* ── CARDS ── */
+.card{background:var(--bgc);border:1px solid var(--border);border-radius:var(--rl);padding:20px}
+.card-s{background:var(--bgc);border:1px solid var(--border);border-radius:var(--r);padding:14px}
+
+/* ── KPI ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:var(--bgc);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start}
+.kpi-label{font-size:12px;color:var(--txt2);margin-bottom:8px}
+.kpi-val{font-size:28px;font-weight:700;letter-spacing:-0.03em}
+.kpi-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--bg2);color:var(--txt2)}
+
+/* ── TABLE ── */
+.tbl-wrap{border-radius:var(--r);border:1px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--bg2)}
+th{padding:11px 15px;text-align:left;font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:13px 15px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.clickable:hover td{background:rgba(255,255,255,0.025);cursor:pointer}
+
+/* ── WORKFLOW TRACKER ── */
+.wf{display:flex;align-items:flex-start;overflow-x:auto;padding:4px 0 10px;gap:0}
+.wf-step{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:78px;opacity:.35;transition:opacity .2s;text-align:center}
+.wf-step.done,.wf-step.active{opacity:1}
+.wf-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--borderl);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--bgc);color:var(--txt2);transition:all .2s}
+.wf-step.done .wf-circle{background:var(--grnd);border-color:var(--grn);color:var(--grn)}
+.wf-step.active .wf-circle{background:var(--accd);border-color:var(--acc);color:var(--acc);box-shadow:0 0 12px var(--accd)}
+.wf-lbl{font-size:9px;font-weight:600;color:var(--txt2);line-height:1.3}
+.wf-step.active .wf-lbl{color:var(--acc)}
+.wf-step.done .wf-lbl{color:var(--grn)}
+.wf-role{font-size:8px;color:var(--txt3)}
+.wf-line{width:36px;height:2px;background:var(--border);flex-shrink:0;margin-bottom:24px;transition:background .2s}
+.wf-line.done{background:var(--grn)}
+
+/* ── BUTTONS ── */
+button{font-family:inherit;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;border:none;transition:all .18s;white-space:nowrap}
+.btn-p{background:var(--acc);color:#0d0f1a}
+.btn-p:hover{background:var(--acch);transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,197,71,.25)}
+.btn-s{background:var(--bgc);color:var(--txt);border:1px solid var(--border)}
+.btn-s:hover{background:var(--bgh);border-color:var(--borderl)}
+.btn-ok{background:var(--grnd);color:var(--grn);border:1px solid rgba(62,207,142,.25)}
+.btn-ok:hover{background:rgba(62,207,142,.2)}
+.btn-err{background:var(--redd);color:var(--red);border:1px solid rgba(245,101,101,.25)}
+.btn-err:hover{background:rgba(245,101,101,.2)}
+.btn-sm{padding:6px 11px;font-size:12px}
+
+/* ── FORM ── */
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:11px;font-weight:600;color:var(--txt2);margin-bottom:5px;letter-spacing:.02em}
+.fld input,.fld select,.fld textarea{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--txt);border-radius:var(--r);padding:9px 12px;font-size:13px;outline:none;font-family:inherit;transition:border-color .18s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--accd)}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--txt3)}
+.fld select option{background:var(--bgc)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+
+/* ── DETAIL LAYOUT ── */
+.detail-layout{display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start}
+.detail-main{display:flex;flex-direction:column;gap:14px}
+.detail-side{display:flex;flex-direction:column;gap:14px;position:sticky;top:0}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.d-row label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:3px;display:block}
+.d-row p{font-size:13px;color:var(--txt)}
+
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column}
+.tl{display:flex;gap:10px;padding-bottom:13px;position:relative}
+.tl::before{content:'';position:absolute;left:4px;top:14px;bottom:0;width:1px;background:var(--border)}
+.tl:last-child::before{display:none}
+.tl-dot{width:9px;height:9px;border-radius:50%;background:var(--acc);flex-shrink:0;margin-top:3px;box-shadow:0 0 6px var(--accd)}
+.tl-body{flex:1}
+.tl-act{font-size:12px;font-weight:500}
+.tl-meta{font-size:11px;color:var(--txt3);margin-top:2px}
+
+/* ── ACTION PANEL ── */
+.action-panel{background:var(--bg2);border:1px solid rgba(232,197,71,.22);border-radius:var(--rl);padding:18px}
+.action-title{font-size:14px;font-weight:700;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+
+/* ── SECTION TITLES ── */
+.sec{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:13px;display:flex;align-items:center;gap:7px}
+
+/* ── SEARCH ── */
+.search-wrap{position:relative;display:flex;align-items:center;flex:1;min-width:200px}
+.search-ico{position:absolute;left:12px;color:var(--txt3);font-size:14px;pointer-events:none}
+.search-inp{padding-left:36px !important;background:var(--bgc) !important;border:1px solid var(--border) !important}
+.search-inp:focus{border-color:var(--acc) !important}
+
+/* ── NOTIFY ── */
+.notif-item{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border-radius:var(--r);border:1px solid transparent;margin-bottom:4px;cursor:pointer;transition:all .15s}
+.notif-item:hover{border-color:var(--border)}
+.notif-item.unread{background:rgba(232,197,71,.04);border-color:rgba(232,197,71,.1)}
+.ndot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.n-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.n-msg{font-size:12px;color:var(--txt2);line-height:1.4}
+.n-time{font-size:11px;color:var(--txt3);margin-top:5px}
+.unread-pip{width:7px;height:7px;border-radius:50%;background:var(--acc);flex-shrink:0;box-shadow:0 0 6px var(--accd);margin-top:4px}
+
+/* ── TOAST ── */
+#toasts{position:fixed;top:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:9999}
+.toast{background:var(--bgc);border:1px solid var(--borderl);border-radius:var(--r);padding:11px 16px;font-size:13px;font-weight:500;animation:toastIn .22s ease;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+@keyframes toastIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
+@keyframes toastOut{to{transform:translateX(20px);opacity:0}}
+
+/* ── PAGE-SPECIFIC ── */
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.ph-title{font-size:22px;font-weight:700;letter-spacing:-0.03em}
+.ph-sub{font-size:13px;color:var(--txt2);margin-top:3px}
+.empty{text-align:center;padding:60px 20px;color:var(--txt3)}
+.empty-ico{font-size:40px;margin-bottom:12px}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.mono{font-family:'Space Mono',monospace;font-size:11px}
+.req-cell{display:flex;flex-direction:column;gap:2px}
+.req-title{font-size:13px;font-weight:500;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.assign-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.assign-row:last-child{border-bottom:none}
+.assign-ava{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.filter-panel{padding:16px 18px;margin-bottom:14px}
+.dec-btns{display:flex;gap:10px;margin-bottom:14px}
+.dec-btn{flex:1;justify-content:center;padding:11px;border-radius:var(--r);font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;border:2px solid var(--border);background:var(--bg2);color:var(--txt2);cursor:pointer;transition:all .15s}
+.dec-btn.approve{border-color:var(--grn);background:var(--grnd);color:var(--grn)}
+.dec-btn.reject{border-color:var(--red);background:var(--redd);color:var(--red)}
+.img-placeholder{width:70px;height:70px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .15s}
+.img-placeholder:hover{border-color:var(--acc);transform:scale(1.05)}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px}
+.upload-zone:hover{border-color:var(--acc);background:var(--accd)}
+
+/* ── USER CARDS ── */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.team-card{background:var(--bgc);border:1px solid var(--border);border-radius:var(--rl);padding:20px;text-align:center}
+.team-ava{width:52px;height:52px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
+
+/* ── SLA TABLE ── */
+.sla-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.sla-row:last-child{border-bottom:none}
+.sla-label{font-size:12px;color:var(--txt2)}
+.sla-date{font-size:11px;color:var(--txt3);font-family:'Space Mono',monospace}
+
+/* ── STATUS CHART ── */
+.status-overview{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.stat-chip{border-radius:var(--r);padding:10px 14px;text-align:center;cursor:default}
+.stat-num{font-size:20px;font-weight:700;line-height:1}
+.stat-lbl{font-size:10px;margin-top:3px;opacity:.85}
+
+/* ── BACK BUTTON ── */
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);background:none;border:none;cursor:pointer;padding:4px;margin-bottom:14px;transition:color .15s}
+.back-btn:hover{color:var(--acc)}
+
+/* ── BG GLOW ── */
+.bg-glow{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-glow::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(232,197,71,.06),transparent 70%);top:-200px;left:-100px}
+.bg-glow::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(79,142,247,.05),transparent 70%);bottom:-200px;right:-100px}
+
+@media(max-width:900px){
+  .sidebar{width:56px}.logo-text,.user-meta,.nav-lbl,.role-switcher{display:none}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .detail-layout{grid-template-columns:1fr}
+  .d-grid,.grid-2{grid-template-columns:1fr}
+}
+@media(max-width:600px){.content{padding:14px}.kpi-val{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">BrandFlow</span>
+    </div>
+    <div class="user-chip" id="user-chip"></div>
+    <nav id="nav"></nav>
+    <div class="role-switcher" id="role-switcher">
+      <div class="rs-label">Switch Demo Role</div>
+      <div id="rs-btns"></div>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" onclick="S.sidebarOpen=!S.sidebarOpen;document.getElementById('sidebar').classList.toggle('collapsed',!S.sidebarOpen)">☰</button>
+        <span class="page-title" id="page-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span class="role-tag" id="role-tag"></span>
+      </div>
+    </header>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+<div id="toasts"></div>
+
+<script>
+/* ═══════════════════════════ STATE ═════════════════════════════ */
+const S = {
+  role: 'admin',
+  page: 'dashboard',
+  selReq: null,
+  sidebarOpen: true,
+  filterOpen: false,
+  filterVals: { search:'', status:'', city:'', priority:'' },
+  decisionChoice: '',
+
+  users: {
+    admin:       { name:'Vikram Mehta',    email:'admin@branding.com',       role:'admin',       col:'#e8c547', bg:'rgba(232,197,71,.15)',   lbl:'Admin'       },
+    marketplace: { name:'Priya Sharma',    email:'marketplace@branding.com', role:'marketplace', col:'#4f8ef7', bg:'rgba(79,142,247,.15)',   lbl:'Marketplace' },
+    mis:         { name:'Rahul Verma',     email:'mis@branding.com',         role:'mis',         col:'#b794f4', bg:'rgba(183,148,244,.15)',  lbl:'MIS Team'    },
+    recce:       { name:'Amit Singh',      email:'recce@branding.com',       role:'recce',       col:'#4fd1c5', bg:'rgba(79,209,197,.15)',   lbl:'Recce Team'  },
+    vendor:      { name:'FastPrint Co.',   email:'vendor@branding.com',      role:'vendor',      col:'#3ecf8e', bg:'rgba(62,207,142,.15)',   lbl:'Vendor'      },
+  },
+
+  requests: [
+    { id:'BR-2024-0001', title:'Hoarding at Ring Road Junction', type:'Hoarding',
+      status:'awaiting_approval', priority:'high', city:'Surat', state:'Gujarat',
+      address:'Ring Road, Near Sarthana Junction', pincode:'395006',
+      requirements:'Large 40×20 ft hoarding for product launch campaign. Illuminated preferred. Bidirectional visibility needed.',
+      createdBy:'marketplace', assignedMIS:'mis', assignedRecce:'recce', assignedVendor:null,
+      recce:{ notes:'Site accessible from both directions. Good visibility. Power connection available within 30m. No obstructions.', cost:85000, condition:'Good', feasibility:'Feasible', completedAt:'21 Mar 2024' },
+      approval:null, vendorWork:null,
+      created:'18 Mar 2024',
+      activities:[
+        { action:'Request created', by:'marketplace', time:'18 Mar, 09:00' },
+        { action:'Assigned to Recce Team: Amit Singh', by:'mis', time:'18 Mar, 11:30' },
+        { action:'Recce in progress — site visit started', by:'recce', time:'20 Mar, 10:00' },
+        { action:'Recce completed – submitted for approval', by:'recce', time:'21 Mar, 16:45' },
+      ],
+      sla:{ created:'18 Mar', toRecce:'18 Mar', recceCompleted:'21 Mar' }
+    },
+    { id:'BR-2024-0002', title:'LED Signage — VR Mall Entrance', type:'LED Signage',
+      status:'assigned_to_recce', priority:'medium', city:'Surat', state:'Gujarat',
+      address:'VR Surat Mall, Dumas Road', pincode:'395007',
+      requirements:'LED display 10×6 ft at main entrance. Full color, supports animation. Must be weatherproof.',
+      createdBy:'marketplace', assignedMIS:'mis', assignedRecce:'recce', assignedVendor:null,
+      recce:null, approval:null, vendorWork:null,
+      created:'22 Mar 2024',
+      activities:[
+        { action:'Request created', by:'marketplace', time:'22 Mar, 08:00' },
+        { action:'Assigned to Recce Team: Amit Singh', by:'mis', time:'22 Mar, 14:00' },
+      ],
+      sla:{ created:'22 Mar', toRecce:'22 Mar' }
+    },
+    { id:'BR-2024-0003', title:'Wall Painting — Citylight Area', type:'Wall Painting',
+      status:'work_completed', priority:'low', city:'Surat', state:'Gujarat',
+      address:'Citylight, Parle Point', pincode:'395007',
+      requirements:'20×15 ft wall painting in brand colors. Use approved color palette and logo guidelines.',
+      createdBy:'marketplace', assignedMIS:'mis', assignedRecce:'recce', assignedVendor:'vendor',
+      recce:{ notes:'Wall condition excellent. Easy scaffold access. No electrical hazards.', cost:35000, condition:'Excellent', feasibility:'Feasible', completedAt:'08 Mar 2024' },
+      approval:{ by:'admin', budget:35000, comment:'Approved. Standard guidelines apply. Complete by 20th.', date:'10 Mar 2024' },
+      vendorWork:{ notes:'Work completed as per specifications. 2 coats applied. Brand elements verified.', actualCost:33000, completedAt:'16 Mar 2024', images:4 },
+      created:'05 Mar 2024',
+      activities:[
+        { action:'Request created', by:'marketplace', time:'05 Mar, 09:00' },
+        { action:'Assigned to Recce Team', by:'mis', time:'05 Mar, 11:00' },
+        { action:'Recce in progress', by:'recce', time:'07 Mar, 09:30' },
+        { action:'Recce completed – submitted for approval', by:'recce', time:'08 Mar, 15:00' },
+        { action:'Request approved by Admin', by:'admin', time:'10 Mar, 10:00' },
+        { action:'Assigned to Vendor: FastPrint Co.', by:'mis', time:'11 Mar, 09:30' },
+        { action:'Vendor started branding work', by:'vendor', time:'12 Mar, 08:00' },
+        { action:'Branding work completed by vendor', by:'vendor', time:'16 Mar, 17:00' },
+      ],
+      sla:{ created:'05 Mar', toRecce:'05 Mar', recceCompleted:'08 Mar', approvalDecision:'10 Mar', toVendor:'11 Mar', workCompleted:'16 Mar' }
+    },
+    { id:'BR-2024-0004', title:'Flex Banner — Adajan Square', type:'Flex Banner',
+      status:'created', priority:'urgent', city:'Surat', state:'Gujarat',
+      address:'Adajan Char Rasta, Near HDFC Bank', pincode:'395009',
+      requirements:'18×10 ft flex banner for product launch event. Deadline: 5 days. High footfall zone.',
+      createdBy:'marketplace', assignedMIS:null, assignedRecce:null, assignedVendor:null,
+      recce:null, approval:null, vendorWork:null,
+      created:'23 Mar 2024',
+      activities:[{ action:'Request created', by:'marketplace', time:'23 Mar, 08:30' }],
+      sla:{ created:'23 Mar' }
+    },
+    { id:'BR-2024-0005', title:'Glow Sign — Vesu Junction', type:'Glow Sign Board',
+      status:'approved', priority:'high', city:'Ahmedabad', state:'Gujarat',
+      address:'Vesu Junction, SG Highway', pincode:'380054',
+      requirements:'8×4 ft glow sign with company logo. LED backlit. Dual-sided.',
+      createdBy:'marketplace', assignedMIS:'mis', assignedRecce:'recce', assignedVendor:null,
+      recce:{ notes:'Premium visibility. High traffic. Power available. Site owner permission obtained.', cost:55000, condition:'Excellent', feasibility:'Feasible', completedAt:'15 Mar 2024' },
+      approval:{ by:'admin', budget:55000, comment:'Approved. High priority location — expedite.', date:'17 Mar 2024' },
+      vendorWork:null,
+      created:'13 Mar 2024',
+      activities:[
+        { action:'Request created', by:'marketplace', time:'13 Mar, 10:00' },
+        { action:'Assigned to Recce Team', by:'mis', time:'13 Mar, 12:00' },
+        { action:'Recce completed', by:'recce', time:'15 Mar, 14:00' },
+        { action:'Request approved by Admin', by:'admin', time:'17 Mar, 09:00' },
+      ],
+      sla:{ created:'13 Mar', toRecce:'13 Mar', recceCompleted:'15 Mar', approvalDecision:'17 Mar' }
+    },
+    { id:'BR-2024-0006', title:'Neon Sign — Alpha One Mall', type:'Neon Sign',
+      status:'assigned_to_vendor', priority:'medium', city:'Ahmedabad', state:'Gujarat',
+      address:'Alpha One Mall, Vastrapur', pincode:'380015',
+      requirements:'Custom neon sign 6×3 ft. Brand colors: orange and white.',
+      createdBy:'marketplace', assignedMIS:'mis', assignedRecce:'recce', assignedVendor:'vendor',
+      recce:{ notes:'Indoor mall location. Controlled environment. Easy installation.', cost:42000, condition:'Excellent', feasibility:'Feasible', completedAt:'10 Mar 2024' },
+      approval:{ by:'admin', budget:42000, comment:'Approved.', date:'12 Mar 2024' },
+      vendorWork:null,
+      created:'08 Mar 2024',
+      activities:[
+        { action:'Request created', by:'marketplace', time:'08 Mar, 09:00' },
+        { action:'Assigned to Recce Team', by:'mis', time:'08 Mar, 10:00' },
+        { action:'Recce completed', by:'recce', time:'10 Mar, 15:00' },
+        { action:'Request approved', by:'admin', time:'12 Mar, 10:00' },
+        { action:'Assigned to Vendor: FastPrint Co.', by:'mis', time:'13 Mar, 09:00' },
+      ],
+      sla:{ created:'08 Mar', toRecce:'08 Mar', recceCompleted:'10 Mar', approvalDecision:'12 Mar', toVendor:'13 Mar' }
+    }
+  ],
+
+  notifications: [
+    { title:'New Request: Flex Banner — Adajan', msg:'Priya Sharma created a new urgent branding request. Please review and assign.', type:'request_created', read:false, time:'Just now', reqId:'BR-2024-0004' },
+    { title:'Recce Completed: BR-2024-0001', msg:'Amit Singh submitted the recce report. Estimated cost ₹85,000. Awaiting your approval.', type:'recce_completed', read:false, time:'2 hrs ago', reqId:'BR-2024-0001' },
+    { title:'Work Completed: BR-2024-0003', msg:'FastPrint Co. has completed the Wall Painting work and uploaded 4 completion images.', type:'work_completed', read:true, time:'7 days ago', reqId:'BR-2024-0003' },
+    { title:'Request Approved: BR-2024-0005', msg:'Glow Sign request approved. Budget ₹55,000 sanctioned. MIS Team please assign vendor.', type:'approved', read:true, time:'6 days ago', reqId:'BR-2024-0005' },
+  ],
+
+  newReqCtr: 7
+};
+
+/* ═══════════════════════════ CONSTANTS ═════════════════════════ */
+const STATUS = {
+  created:            { label:'Created',           col:'#8890b5', bg:'rgba(136,144,181,.13)', ico:'🆕' },
+  assigned_to_recce:  { label:'Assigned to Recce', col:'#4f8ef7', bg:'rgba(79,142,247,.13)',  ico:'📋' },
+  recce_in_progress:  { label:'Recce In Progress', col:'#f6ad55', bg:'rgba(246,173,85,.13)',  ico:'🔍' },
+  recce_completed:    { label:'Recce Completed',   col:'#b794f4', bg:'rgba(183,148,244,.13)', ico:'✅' },
+  awaiting_approval:  { label:'Awaiting Approval', col:'#e8c547', bg:'rgba(232,197,71,.13)',  ico:'⏳' },
+  approved:           { label:'Approved',           col:'#3ecf8e', bg:'rgba(62,207,142,.13)',  ico:'✔️' },
+  rejected:           { label:'Rejected',           col:'#f56565', bg:'rgba(245,101,101,.13)', ico:'❌' },
+  assigned_to_vendor: { label:'Assigned to Vendor',col:'#4fd1c5', bg:'rgba(79,209,197,.13)',  ico:'🏭' },
+  work_in_progress:   { label:'Work In Progress',  col:'#f6ad55', bg:'rgba(246,173,85,.13)',  ico:'🔨' },
+  work_completed:     { label:'Work Completed',     col:'#3ecf8e', bg:'rgba(62,207,142,.13)',  ico:'🎉' },
+};
+const PRI = {
+  low:    { col:'#8890b5', bg:'rgba(136,144,181,.13)' },
+  medium: { col:'#4f8ef7', bg:'rgba(79,142,247,.13)' },
+  high:   { col:'#f6ad55', bg:'rgba(246,173,85,.13)' },
+  urgent: { col:'#f56565', bg:'rgba(245,101,101,.13)' },
+};
+const WF_STEPS = [
+  { key:'created',            lbl:'Request\nCreated',    role:'Marketplace' },
+  { key:'assigned_to_recce',  lbl:'Assigned\nto Recce',  role:'MIS Team' },
+  { key:'recce_in_progress',  lbl:'Recce\nIn Progress',  role:'Recce Team' },
+  { key:'awaiting_approval',  lbl:'Awaiting\nApproval',  role:'Admin' },
+  { key:'approved',           lbl:'Approved',             role:'Admin' },
+  { key:'assigned_to_vendor', lbl:'Assigned\nto Vendor', role:'MIS Team' },
+  { key:'work_completed',     lbl:'Work\nCompleted',      role:'Vendor' },
+];
+const STATUS_ORDER = ['created','assigned_to_recce','recce_in_progress','recce_completed','awaiting_approval','approved','assigned_to_vendor','work_in_progress','work_completed'];
+const NAV = [
+  { id:'dashboard', ico:'📊', lbl:'Dashboard' },
+  { id:'requests',  ico:'📁', lbl:'Requests' },
+  { id:'new',       ico:'➕', lbl:'New Request', roles:['marketplace','admin'] },
+  { id:'notifs',    ico:'🔔', lbl:'Notifications' },
+  { id:'team',      ico:'👥', lbl:'Team', roles:['admin','mis'] },
+  { id:'profile',   ico:'👤', lbl:'Profile' },
+];
+
+/* ═══════════════════════════ HELPERS ════════════════════════════ */
+const fc = n => n ? '₹'+Number(n).toLocaleString('en-IN') : '—';
+const sbadge = s => { const c=STATUS[s]||{lbl:s,col:'#888',bg:'rgba(136,136,136,.12)',ico:'•'}; return `<span class="badge" style="background:${c.bg};color:${c.col}">${c.ico} ${c.lbl}</span>`; };
+const pbadge = p => { const c=PRI[p]||PRI.medium; return `<span class="badge" style="background:${c.bg};color:${c.col};text-transform:capitalize">${p}</span>`; };
+const stepIdx = s => STATUS_ORDER.indexOf(s);
+
+function showToast(msg, type='success') {
+  const colors = { success:'var(--grn)', error:'var(--red)', info:'var(--acc)' };
+  const icons  = { success:'✅', error:'❌', info:'ℹ️' };
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.style.borderLeft = `3px solid ${colors[type]}`;
+  el.innerHTML = `${icons[type]} ${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => { el.style.animation='toastOut .22s ease forwards'; setTimeout(()=>el.remove(),220); }, 3000);
+}
+
+/* ═══════════════════════════ RENDER SIDEBAR ════════════════════ */
+function renderSidebar() {
+  const u = S.users[S.role];
+  document.getElementById('user-chip').innerHTML = `
+    <div class="ava" style="background:${u.bg};color:${u.col}">${u.name[0]}</div>
+    <div class="user-meta">
+      <span class="u-name">${u.name}</span>
+      <span class="u-role" style="color:${u.col}">${u.lbl}</span>
+    </div>`;
+
+  const unread = S.notifications.filter(n=>!n.read).length;
+  const items = NAV.filter(i=>!i.roles||i.roles.includes(S.role));
+  document.getElementById('nav').innerHTML = items.map(i=>`
+    <div class="nav-i ${S.page===i.id?'active':''}" onclick="nav('${i.id}')">
+      <span class="nav-icon">${i.ico}${i.id==='notifs'&&unread>0?`<span class="notif-pip">${unread}</span>`:''}</span>
+      <span class="nav-lbl">${i.lbl}</span>
+    </div>`).join('');
+
+  document.getElementById('rs-btns').innerHTML = Object.values(S.users).map(u2=>`
+    <button class="rs-btn ${u2.role===S.role?'active':''}" onclick="switchRole('${u2.role}')"
+      style="${u2.role===S.role?`background:${u2.bg};color:${u2.col}`:''}">${u2.lbl}</button>`).join('');
+
+  document.getElementById('role-tag').style.cssText = `background:${u.bg};color:${u.col}`;
+  document.getElementById('role-tag').textContent = u.lbl;
+}
+
+/* ═══════════════════════════ NAVIGATION ═════════════════════════ */
+function nav(page, reqId=null) {
+  S.page=page; if(reqId) S.selReq=reqId;
+  S.decisionChoice='';
+  const TITLES = { dashboard:'Dashboard', requests:'All Requests', new:'New Request', notifs:'Notifications', team:'Team Members', profile:'My Profile', detail:'Request Detail' };
+  document.getElementById('page-title').textContent = TITLES[page]||'BrandFlow';
+  renderSidebar();
+  renderContent();
+}
+
+function switchRole(role) {
+  S.role=role; S.page='dashboard'; S.selReq=null;
+  renderSidebar(); renderContent();
+  showToast(`Switched to ${S.users[role].lbl} view`, 'info');
+}
+
+/* ═══════════════════════════ RENDER CONTENT ═════════════════════ */
+function renderContent() {
+  const el = document.getElementById('content');
+  const pages = { dashboard:renderDashboard, requests:renderRequests, new:renderNewRequest, notifs:renderNotifications, team:renderTeam, profile:renderProfile, detail:renderDetail };
+  el.innerHTML = (pages[S.page]||renderDashboard)();
+}
+
+/* ─── DASHBOARD ─── */
+function renderDashboard() {
+  const all = S.requests;
+  const mine = all.filter(r => {
+    if(S.role==='marketplace') return r.createdBy==='marketplace';
+    if(S.role==='recce') return r.assignedRecce==='recce';
+    if(S.role==='vendor') return r.assignedVendor==='vendor';
+    return true;
+  });
+
+  const byStatus = {};
+  mine.forEach(r=>{ byStatus[r.status]=(byStatus[r.status]||0)+1; });
+  const total=mine.length, completed=mine.filter(r=>r.status==='work_completed').length,
+        pending=mine.filter(r=>r.status==='awaiting_approval').length,
+        active=mine.filter(r=>!['work_completed','rejected'].includes(r.status)).length;
+
+  const statusItems = Object.entries(STATUS).map(([k,v])=>{
+    const n=byStatus[k]||0; if(!n) return '';
+    return `<div class="stat-chip" style="background:${v.bg}" title="${v.lbl}">
+      <div class="stat-num" style="color:${v.col}">${n}</div>
+      <div class="stat-lbl" style="color:${v.col}">${v.lbl}</div>
+    </div>`;
+  }).join('');
+
+  const recentRows = mine.slice(0,6).map(r=>`
+    <tr class="clickable" onclick="nav('detail','${r.id}')">
+      <td><span class="mono" style="color:var(--acc)">${r.id}</span></td>
+      <td><div class="req-cell"><div class="req-title">${r.title}</div><div style="font-size:11px;color:var(--txt3)">${S.users[r.createdBy]?.name}</div></div></td>
+      <td style="color:var(--txt2);font-size:12px">📍 ${r.city}</td>
+      <td>${sbadge(r.status)}</td>
+      <td>${pbadge(r.priority)}</td>
+    </tr>`).join('');
+
+  const u=S.users[S.role];
+  return `
+    <div class="page-header">
+      <div>
+        <div class="ph-title">Welcome, ${u.name.split(' ')[0]} 👋</div>
+        <div class="ph-sub">Here's your ${u.lbl} overview — ${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})}</div>
+      </div>
+      ${['marketplace','admin'].includes(S.role)?`<button class="btn btn-p" onclick="nav('new')">➕ New Request</button>`:''}
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Total Requests</div><div class="kpi-val" style="color:var(--blu)">${total}</div></div><div class="kpi-ico" style="background:var(--blud);color:var(--blu)">📋</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Pending Approval</div><div class="kpi-val" style="color:var(--acc)">${pending}</div></div><div class="kpi-ico" style="background:var(--accd);color:var(--acc)">⏳</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Completed</div><div class="kpi-val" style="color:var(--grn)">${completed}</div></div><div class="kpi-ico" style="background:var(--grnd);color:var(--grn)">✅</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Active</div><div class="kpi-val" style="color:var(--org)">${active}</div></div><div class="kpi-ico" style="background:var(--orgd);color:var(--org)">🔄</div></div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="sec">📊 Status Breakdown</div>
+      <div class="status-overview">${statusItems||'<div style="color:var(--txt3);font-size:13px">No requests yet.</div>'}</div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="sec" style="margin-bottom:0">Recent Requests</div>
+        <button class="btn btn-s btn-sm" onclick="nav('requests')">View All →</button>
+      </div>
+      ${mine.length?`<div class="tbl-wrap"><table><thead><tr><th>Request #</th><th>Title</th><th>Location</th><th>Status</th><th>Priority</th></tr></thead><tbody>${recentRows}</tbody></table></div>`:
+      '<div class="empty"><div class="empty-ico">📭</div><p>No requests yet</p></div>'}
+    </div>`;
+}
+
+/* ─── REQUESTS LIST ─── */
+function renderRequests() {
+  const f = S.filterVals;
+  let reqs = S.requests.filter(r => {
+    if(S.role==='marketplace') return r.createdBy==='marketplace';
+    if(S.role==='recce') return r.assignedRecce==='recce';
+    if(S.role==='vendor') return r.assignedVendor==='vendor';
+    return true;
+  }).filter(r => {
+    if(f.search && !r.id.toLowerCase().includes(f.search.toLowerCase()) && !r.title.toLowerCase().includes(f.search.toLowerCase()) && !r.city.toLowerCase().includes(f.search.toLowerCase())) return false;
+    if(f.status && r.status!==f.status) return false;
+    if(f.city && !r.city.toLowerCase().includes(f.city.toLowerCase())) return false;
+    if(f.priority && r.priority!==f.priority) return false;
+    return true;
+  });
+
+  const hasF = Object.values(f).some(Boolean);
+  const rows = reqs.map(r=>`
+    <tr class="clickable" onclick="nav('detail','${r.id}')">
+      <td><span class="mono" style="color:var(--acc)">${r.id}</span></td>
+      <td><div class="req-cell"><div class="req-title">${r.title}</div><div style="font-size:11px;color:var(--txt3)">by ${S.users[r.createdBy]?.name}</div></div></td>
+      <td style="color:var(--txt2);font-size:12px">📍 ${r.city}, ${r.state}</td>
+      <td><span class="tag">${r.type}</span></td>
+      <td>${pbadge(r.priority)}</td>
+      <td>${sbadge(r.status)}</td>
+      <td><button class="btn btn-s btn-sm" onclick="event.stopPropagation();nav('detail','${r.id}')">View →</button></td>
+    </tr>`).join('');
+
+  return `
+    <div class="page-header">
+      <div>
+        <div class="ph-title">Branding Requests</div>
+        <div class="ph-sub">${reqs.length} of ${S.requests.length} requests</div>
+      </div>
+      ${['marketplace','admin'].includes(S.role)?`<button class="btn btn-p" onclick="nav('new')">➕ New Request</button>`:''}
+    </div>
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-ico">🔍</span>
+        <input class="search-inp" style="width:100%;padding:9px 12px" placeholder="Search by ID, title, city…" value="${f.search}" oninput="S.filterVals.search=this.value;renderContent()"/>
+      </div>
+      <button class="btn btn-s btn-sm ${S.filterOpen?'':''}${hasF?' btn-p':''}" onclick="S.filterOpen=!S.filterOpen;renderContent()">
+        ⚙ Filters ${hasF?'('+Object.values(f).filter(Boolean).length+')':''}
+      </button>
+      ${hasF?`<button class="btn btn-s btn-sm" onclick="S.filterVals={search:'',status:'',city:'',priority:''};renderContent()">✕ Clear</button>`:''}
+    </div>
+    ${S.filterOpen?`
+    <div class="card filter-panel" style="margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px">
+        <div class="fld" style="margin:0"><label>Status</label>
+          <select onchange="S.filterVals.status=this.value;renderContent()">
+            <option value="">All Statuses</option>
+            ${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${f.status===k?'selected':''}>${v.lbl}</option>`).join('')}
+          </select></div>
+        <div class="fld" style="margin:0"><label>City</label>
+          <input type="text" placeholder="e.g. Surat" value="${f.city}" oninput="S.filterVals.city=this.value;renderContent()"/></div>
+        <div class="fld" style="margin:0"><label>Priority</label>
+          <select onchange="S.filterVals.priority=this.value;renderContent()">
+            <option value="">All Priorities</option>
+            ${['low','medium','high','urgent'].map(p=>`<option value="${p}" ${f.priority===p?'selected':''}>${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('')}
+          </select></div>
+      </div>
+    </div>`:''}
+    ${rows?`<div class="tbl-wrap"><table><thead><tr><th>Request #</th><th>Title</th><th>Location</th><th>Type</th><th>Priority</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`:
+    `<div class="empty"><div class="empty-ico">🔍</div><p>No requests match your filters</p></div>`}`;
+}
+
+/* ─── WORKFLOW TRACKER ─── */
+function renderWorkflow(status) {
+  const idx = stepIdx(status);
+  return `<div class="wf">
+    ${WF_STEPS.map((s,i)=>{
+      const done=idx>i, active=idx===i;
+      return `<div style="display:flex;align-items:center;flex-shrink:0">
+        <div class="wf-step ${done?'done':''} ${active?'active':''}">
+          <div class="wf-circle">${done?'✓':i+1}</div>
+          <div class="wf-lbl">${s.lbl.replace('\n','<br>')}</div>
+          <div class="wf-role">${s.role}</div>
+        </div>
+        ${i<WF_STEPS.length-1?`<div class="wf-line ${done?'done':''}"></div>`:''}
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* ─── REQUEST DETAIL ─── */
+function renderDetail() {
+  const req = S.requests.find(r=>r.id===S.selReq);
+  if(!req) return '<div class="empty">Request not found</div>';
+
+  const can = {
+    assignRecce:   ['mis','admin'].includes(S.role) && ['created'].includes(req.status),
+    completeRecce: S.role==='recce' && ['assigned_to_recce','recce_in_progress'].includes(req.status),
+    approve:       S.role==='admin' && req.status==='awaiting_approval',
+    assignVendor:  ['mis','admin'].includes(S.role) && req.status==='approved',
+    startWork:     S.role==='vendor' && req.status==='assigned_to_vendor',
+    completeWork:  S.role==='vendor' && req.status==='work_in_progress',
+  };
+
+  const slaRows = [
+    ['Created', req.sla?.created],
+    ['Assigned to Recce', req.sla?.toRecce],
+    ['Recce Completed', req.sla?.recceCompleted],
+    ['Approval Decision', req.sla?.approvalDecision],
+    ['Assigned to Vendor', req.sla?.toVendor],
+    ['Work Completed', req.sla?.workCompleted],
+  ].filter(([,d])=>d);
+
+  return `
+    <button class="back-btn" onclick="nav('requests')">← Back to Requests</button>
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px">
+      <span class="mono" style="color:var(--acc)">${req.id}</span>
+      ${sbadge(req.status)} ${pbadge(req.priority)}
+      <span class="tag">${req.type}</span>
+    </div>
+    <div style="font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:5px">${req.title}</div>
+    <div style="display:flex;gap:16px;color:var(--txt2);font-size:12px;margin-bottom:18px;flex-wrap:wrap">
+      <span>👤 ${S.users[req.createdBy]?.name}</span>
+      <span>📍 ${req.city}, ${req.state}</span>
+      <span>📅 ${req.created}</span>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="sec">⚡ Workflow Progress</div>
+      ${renderWorkflow(req.status)}
+    </div>
+
+    <div class="detail-layout">
+      <div class="detail-main">
+        <div class="card">
+          <div class="sec">📄 Request Details</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Branding Type</label><p>${req.type}</p></div>
+            <div class="d-row"><label>Priority</label><p style="text-transform:capitalize;font-weight:600;color:${PRI[req.priority]?.col}">${req.priority}</p></div>
+            <div class="d-row"><label>Address</label><p>${req.address}</p></div>
+            <div class="d-row"><label>City / State / Pin</label><p>${req.city}, ${req.state} ${req.pincode}</p></div>
+          </div>
+          <div><label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Requirements</label>
+          <p style="font-size:13px;color:var(--txt2);margin-top:5px;line-height:1.6">${req.requirements}</p></div>
+        </div>
+
+        ${req.recce?`
+        <div class="card">
+          <div class="sec">🔍 Recce Report</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Estimated Cost</label><p style="color:var(--acc);font-size:15px;font-weight:700">${fc(req.recce.cost)}</p></div>
+            <div class="d-row"><label>Site Condition</label><p>${req.recce.condition}</p></div>
+            <div class="d-row"><label>Feasibility</label><p style="color:var(--grn)">${req.recce.feasibility}</p></div>
+            <div class="d-row"><label>Recce Date</label><p>${req.recce.completedAt}</p></div>
+          </div>
+          <div style="margin-bottom:12px"><label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Site Notes</label>
+          <p style="font-size:13px;color:var(--txt2);margin-top:5px;line-height:1.6">${req.recce.notes}</p></div>
+          <div>
+            <label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;display:block;margin-bottom:8px">Site Images (3 uploaded)</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              ${[1,2,3].map(i=>`<div class="img-placeholder" onclick="showToast('Image preview — in production, opens full-size from S3','info')">📸</div>`).join('')}
+            </div>
+          </div>
+        </div>`:''}
+
+        ${req.approval?`
+        <div class="card" style="border-color:rgba(62,207,142,.3)">
+          <div class="sec" style="color:var(--grn)">✅ Approval</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Decision</label><p style="color:var(--grn);font-weight:700">APPROVED</p></div>
+            <div class="d-row"><label>Approved Budget</label><p style="color:var(--acc);font-size:15px;font-weight:700">${fc(req.approval.budget)}</p></div>
+            <div class="d-row"><label>Approved By</label><p>${S.users[req.approval.by]?.name}</p></div>
+            <div class="d-row"><label>Date</label><p>${req.approval.date}</p></div>
+          </div>
+          <p style="font-size:13px;color:var(--txt2)">${req.approval.comment}</p>
+        </div>`:''}
+
+        ${req.vendorWork?`
+        <div class="card" style="border-color:rgba(62,207,142,.3)">
+          <div class="sec" style="color:var(--grn)">🎉 Work Completed</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Actual Cost</label><p style="color:var(--acc);font-size:15px;font-weight:700">${fc(req.vendorWork.actualCost)}</p></div>
+            <div class="d-row"><label>Completed On</label><p>${req.vendorWork.completedAt}</p></div>
+          </div>
+          <p style="font-size:13px;color:var(--txt2);margin-bottom:12px">${req.vendorWork.notes}</p>
+          <div>
+            <label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;display:block;margin-bottom:8px">Final Images (${req.vendorWork.images} uploaded)</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              ${[...Array(req.vendorWork.images)].map(()=>`<div class="img-placeholder" onclick="showToast('Final branding image — stored in S3','info')">🖼️</div>`).join('')}
+            </div>
+          </div>
+        </div>`:''}
+
+        ${can.assignRecce?`
+        <div class="action-panel">
+          <div class="action-title">📤 Assign to Recce Team</div>
+          <div class="fld"><label>Select Recce Team Member *</label>
+            <select id="sel-recce"><option value="">-- Choose member --</option><option value="recce">Amit Singh (Recce Team)</option></select></div>
+          <div class="fld"><label>MIS Notes (optional)</label>
+            <textarea id="mis-notes" rows="2" placeholder="Any instructions for the recce team…"></textarea></div>
+          <button class="btn btn-p" onclick="doAssignRecce('${req.id}')">📤 Assign to Recce Team</button>
+        </div>`:''}
+
+        ${can.completeRecce?`
+        <div class="action-panel">
+          <div class="action-title">🔍 Submit Recce Report</div>
+          <div class="grid-2">
+            <div class="fld"><label>Site Condition</label>
+              <select id="site-cond"><option>Excellent</option><option selected>Good</option><option>Fair</option><option>Poor</option></select></div>
+            <div class="fld"><label>Feasibility</label>
+              <select id="feasibility"><option selected>Feasible</option><option>Feasible with Changes</option><option>Not Feasible</option></select></div>
+          </div>
+          <div class="fld"><label>Estimated Cost (₹) *</label>
+            <input id="est-cost" type="number" placeholder="e.g. 85000" min="0"/></div>
+          <div class="fld"><label>Site Observations *</label>
+            <textarea id="site-notes" rows="3" placeholder="Describe site condition, access, visibility, power availability…"></textarea></div>
+          <div class="upload-zone" onclick="showToast('In production: opens file picker → uploads to AWS S3','info')">
+            📸 Click to upload site photos &nbsp;·&nbsp; <span style="font-size:11px;color:var(--txt3)">JPEG, PNG, WebP — max 10MB each</span>
+          </div>
+          <button class="btn btn-p" onclick="doCompleteRecce('${req.id}')">✅ Submit Recce Report</button>
+        </div>`:''}
+
+        ${can.approve?`
+        <div class="action-panel">
+          <div class="action-title">⚖️ Approve or Reject Request</div>
+          <div class="dec-btns">
+            <button id="btn-approve" class="dec-btn ${S.decisionChoice==='approved'?'approve':''}" onclick="setDecision('approved')">✅ Approve</button>
+            <button id="btn-reject"  class="dec-btn ${S.decisionChoice==='rejected'?'reject':''}"  onclick="setDecision('rejected')">❌ Reject</button>
+          </div>
+          <div class="fld"><label>Approved Budget (₹)</label>
+            <input id="final-budget" type="number" placeholder="${req.recce?.cost||'Enter budget'}"/></div>
+          <div class="fld"><label>Comment / Reason *</label>
+            <textarea id="approval-comment" rows="3" placeholder="Add feedback, reason, or instructions…"></textarea></div>
+          <button class="btn ${S.decisionChoice==='rejected'?'btn-err':'btn-p'}" onclick="doApprove('${req.id}')">
+            ${S.decisionChoice?`Submit: ${S.decisionChoice.toUpperCase()}`:'Submit Decision'}
+          </button>
+        </div>`:''}
+
+        ${can.assignVendor?`
+        <div class="action-panel">
+          <div class="action-title">🏭 Assign to Vendor</div>
+          <div class="fld"><label>Select Vendor *</label>
+            <select id="sel-vendor"><option value="">-- Choose vendor --</option><option value="vendor">FastPrint Solutions — ⭐ 4.5 — 23 jobs completed</option></select></div>
+          <button class="btn btn-p" onclick="doAssignVendor('${req.id}')">📤 Assign Work Order to Vendor</button>
+        </div>`:''}
+
+        ${can.startWork?`
+        <div class="card" style="border-color:rgba(79,209,197,.3)">
+          <p style="color:var(--txt2);font-size:13px;margin-bottom:12px">You have been assigned this work order. Approved budget: <strong style="color:var(--acc)">${fc(req.approval?.budget)}</strong></p>
+          <button class="btn btn-ok" onclick="doStartWork('${req.id}')">🔨 Start Work</button>
+        </div>`:''}
+
+        ${can.completeWork?`
+        <div class="action-panel">
+          <div class="action-title">🎉 Mark Work as Completed</div>
+          <div class="fld"><label>Actual Cost Incurred (₹)</label>
+            <input id="actual-cost" type="number" placeholder="${req.approval?.budget||'0'}"/></div>
+          <div class="fld"><label>Completion Notes</label>
+            <textarea id="vendor-notes" rows="3" placeholder="Describe work done, materials used, any observations…"></textarea></div>
+          <div class="upload-zone" onclick="showToast('In production: uploads final photos to AWS S3 before completing','info')">
+            📷 Upload final branding photos &nbsp;·&nbsp; <span style="font-size:11px;color:var(--txt3)">Required — minimum 2 photos</span>
+          </div>
+          <button class="btn btn-ok" onclick="doCompleteWork('${req.id}')">🎉 Mark as Completed</button>
+        </div>`:''}
+      </div>
+
+      <div class="detail-side">
+        <div class="card">
+          <div class="sec">👥 Assignments</div>
+          ${assignRow('Requester', req.createdBy, '#4f8ef7')}
+          ${req.assignedMIS?assignRow('MIS Team', req.assignedMIS, '#b794f4'):''}
+          ${req.assignedRecce?assignRow('Recce Team', req.assignedRecce, '#4fd1c5'):''}
+          ${req.assignedVendor?assignRow('Vendor', req.assignedVendor, '#3ecf8e'):''}
+          ${!req.assignedMIS&&!req.assignedRecce&&!req.assignedVendor?`<p style="font-size:12px;color:var(--txt3)">Not yet assigned beyond requester.</p>`:''}
+        </div>
+
+        ${slaRows.length?`
+        <div class="card">
+          <div class="sec">⏱ SLA Timeline</div>
+          ${slaRows.map(([l,d])=>`<div class="sla-row"><span class="sla-label">${l}</span><span class="sla-date">${d}</span></div>`).join('')}
+        </div>`:''}
+
+        <div class="card">
+          <div class="sec">📜 Activity Log</div>
+          <div class="timeline">
+            ${[...req.activities].reverse().map(a=>`
+              <div class="tl">
+                <div class="tl-dot"></div>
+                <div class="tl-body">
+                  <div class="tl-act">${a.action}</div>
+                  <div class="tl-meta"><span style="color:var(--acc);font-weight:600">${S.users[a.by]?.name||a.by}</span> · ${a.time}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function assignRow(label, roleKey, col) {
+  const u=S.users[roleKey]; if(!u) return '';
+  return `<div class="assign-row">
+    <div class="assign-ava" style="background:${col}22;color:${col}">${u.name[0]}</div>
+    <div><div style="font-size:13px;font-weight:500">${u.name}</div><div style="font-size:11px;color:var(--txt3)">${label}</div></div>
+  </div>`;
+}
+
+function setDecision(d) {
+  S.decisionChoice = d; renderContent();
+}
+
+/* ─── ACTIONS ─── */
+function doAssignRecce(id) {
+  const v=document.getElementById('sel-recce')?.value;
+  if(!v){ showToast('Please select a recce team member','error'); return; }
+  const r=S.requests.find(x=>x.id===id);
+  r.status='assigned_to_recce'; r.assignedRecce='recce'; r.assignedMIS='mis';
+  r.sla = { ...r.sla, toRecce:'Today' };
+  r.activities.push({ action:'Assigned to Recce Team: Amit Singh', by:'mis', time:'Just now' });
+  S.notifications.unshift({ title:`Assigned: ${id}`, msg:'You have been assigned a new recce task.', type:'assigned', read:false, time:'Just now', reqId:id });
+  showToast('Assigned to Recce Team successfully!');
+  renderSidebar(); nav('detail', id);
+}
+
+function doCompleteRecce(id) {
+  const cost=document.getElementById('est-cost')?.value;
+  const notes=document.getElementById('site-notes')?.value||'Site inspection completed.';
+  if(!cost||!notes.trim()){ showToast('Please fill estimated cost and notes','error'); return; }
+  const r=S.requests.find(x=>x.id===id);
+  r.status='awaiting_approval';
+  r.recce={ notes, cost:parseInt(cost), condition:document.getElementById('site-cond')?.value||'Good', feasibility:document.getElementById('feasibility')?.value||'Feasible', completedAt:'Today' };
+  r.sla = { ...r.sla, recceCompleted:'Today' };
+  r.activities.push({ action:'Recce completed — submitted for approval', by:'recce', time:'Just now' });
+  S.notifications.unshift({ title:`Recce Done: ${id}`, msg:`Recce report submitted. Estimated cost ${fc(parseInt(cost))}.`, type:'recce_completed', read:false, time:'Just now', reqId:id });
+  showToast('Recce report submitted for approval!');
+  renderSidebar(); nav('detail', id);
+}
+
+function doApprove(id) {
+  if(!S.decisionChoice){ showToast('Please click Approve or Reject first','error'); return; }
+  const r=S.requests.find(x=>x.id===id);
+  const budget=document.getElementById('final-budget')?.value;
+  const comment=document.getElementById('approval-comment')?.value||'';
+  r.status=S.decisionChoice;
+  r.sla = { ...r.sla, approvalDecision:'Today' };
+  if(S.decisionChoice==='approved') {
+    r.approval={ by:'admin', budget:parseInt(budget)||r.recce?.cost, comment:comment||'Approved.', date:'Today' };
+    r.activities.push({ action:'Request approved by Admin', by:'admin', time:'Just now' });
+    S.notifications.unshift({ title:`Approved: ${id}`, msg:`Request approved. Budget: ${fc(r.approval.budget)}.`, type:'approved', read:false, time:'Just now', reqId:id });
+    showToast('Request APPROVED! ✅');
+  } else {
+    r.activities.push({ action:'Request rejected by Admin — '+comment, by:'admin', time:'Just now' });
+    S.notifications.unshift({ title:`Rejected: ${id}`, msg:`Request was rejected. Reason: ${comment}`, type:'rejected', read:false, time:'Just now', reqId:id });
+    showToast('Request rejected.', 'error');
+  }
+  S.decisionChoice=''; renderSidebar(); nav('detail', id);
+}
+
+function doAssignVendor(id) {
+  const v=document.getElementById('sel-vendor')?.value;
+  if(!v){ showToast('Please select a vendor','error'); return; }
+  const r=S.requests.find(x=>x.id===id);
+  r.status='assigned_to_vendor'; r.assignedVendor='vendor';
+  r.sla = { ...r.sla, toVendor:'Today' };
+  r.activities.push({ action:'Assigned to Vendor: FastPrint Solutions', by:'mis', time:'Just now' });
+  S.notifications.unshift({ title:`Work Order: ${id}`, msg:`You have been assigned work order ${id}.`, type:'assigned_to_vendor', read:false, time:'Just now', reqId:id });
+  showToast('Work order assigned to vendor!');
+  renderSidebar(); nav('detail', id);
+}
+
+function doStartWork(id) {
+  const r=S.requests.find(x=>x.id===id);
+  r.status='work_in_progress';
+  r.activities.push({ action:'Vendor started branding work', by:'vendor', time:'Just now' });
+  showToast('Work started! 🔨');
+  nav('detail', id);
+}
+
+function doCompleteWork(id) {
+  const cost=document.getElementById('actual-cost')?.value;
+  const notes=document.getElementById('vendor-notes')?.value||'Work completed as per specifications.';
+  const r=S.requests.find(x=>x.id===id);
+  r.status='work_completed';
+  r.vendorWork={ notes, actualCost:parseInt(cost)||r.approval?.budget, completedAt:'Today', images:4 };
+  r.sla = { ...r.sla, workCompleted:'Today' };
+  r.activities.push({ action:'Branding work completed by vendor', by:'vendor', time:'Just now' });
+  S.notifications.unshift({ title:`Work Completed: ${id}`, msg:`Vendor has completed work and uploaded 4 final images.`, type:'work_completed', read:false, time:'Just now', reqId:id });
+  showToast('Work completed! 🎉');
+  renderSidebar(); nav('detail', id);
+}
+
+/* ─── NEW REQUEST ─── */
+function renderNewRequest() {
+  const types=['Hoarding','Flex Banner','LED Signage','Wall Painting','Glow Sign Board','Standee','Vehicle Wrap','Digital Display','Neon Sign','Other'];
+  const states=['Gujarat','Maharashtra','Rajasthan','Delhi','Karnataka','Tamil Nadu','Uttar Pradesh','West Bengal','Telangana','Other'];
+  return `
+    <button class="back-btn" onclick="nav('requests')">← Back to Requests</button>
+    <div class="ph-title" style="margin-bottom:4px">New Branding Request</div>
+    <div class="ph-sub" style="margin-bottom:20px">Submit a request to start the branding workflow</div>
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="sec">📌 Basic Information</div>
+          <div class="fld"><label>Request Title *</label><input id="nr-title" type="text" placeholder="e.g. Hoarding at Ring Road Junction, Surat"/></div>
+          <div class="grid-2">
+            <div class="fld"><label>Branding Type *</label>
+              <select id="nr-type"><option value="">Select type…</option>${types.map(t=>`<option>${t}</option>`).join('')}</select></div>
+            <div class="fld"><label>Priority</label>
+              <select id="nr-pri"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="urgent">🚨 Urgent</option></select></div>
+          </div>
+          <div class="fld"><label>Target Completion Date</label><input id="nr-date" type="date"/></div>
+          <div class="fld"><label>Requirements *</label><textarea id="nr-req" rows="4" placeholder="Describe dimensions, materials, brand guidelines, special requirements…"></textarea></div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="sec">📍 Location Details</div>
+          <div class="fld"><label>Full Address *</label><textarea id="nr-addr" rows="2" placeholder="Street address, building, area, landmark…"></textarea></div>
+          <div class="grid-2">
+            <div class="fld"><label>City *</label><input id="nr-city" type="text" placeholder="e.g. Surat"/></div>
+            <div class="fld"><label>State *</label><select id="nr-state">${states.map(s=>`<option>${s}</option>`).join('')}</select></div>
+          </div>
+          <div class="grid-2">
+            <div class="fld"><label>Pincode</label><input id="nr-pin" type="text" placeholder="395006" maxlength="6"/></div>
+            <div class="fld"><label>Landmark</label><input id="nr-land" type="text" placeholder="Near ABC Mall"/></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="sec">📎 Attachments (optional)</div>
+          <div class="upload-zone" onclick="showToast('In production: opens file picker — uploads to AWS S3','info')">
+            📁 Click to attach reference images or documents<br>
+            <span style="font-size:11px;color:var(--txt3)">PNG, JPG, PDF — max 10MB per file</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px">
+          <button class="btn btn-s" onclick="nav('requests')">Cancel</button>
+          <button class="btn btn-p" onclick="doCreateRequest()">📤 Submit Request</button>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="sec">ℹ️ What happens next?</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            ${[
+              ['📤','You submit the request','MIS Team is notified immediately'],
+              ['👀','MIS Team reviews','Assigns a Recce Team member'],
+              ['🔍','Recce Team visits','Uploads site photos & estimated cost'],
+              ['⚖️','Admin reviews','Approves or rejects with budget'],
+              ['🏭','Vendor assigned','MIS assigns vendor for approved work'],
+              ['🎉','Work completed','Vendor uploads final photos'],
+            ].map(([ico,title,sub])=>`
+              <div style="display:flex;gap:10px">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accd);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">${ico}</div>
+                <div><div style="font-size:12px;font-weight:600">${title}</div><div style="font-size:11px;color:var(--txt3);margin-top:1px">${sub}</div></div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function doCreateRequest() {
+  const title=document.getElementById('nr-title')?.value?.trim();
+  const type=document.getElementById('nr-type')?.value;
+  const city=document.getElementById('nr-city')?.value?.trim();
+  const addr=document.getElementById('nr-addr')?.value?.trim();
+  const req=document.getElementById('nr-req')?.value?.trim();
+  if(!title||!type||!city||!addr||!req){ showToast('Please fill all required fields (*)','error'); return; }
+  const id=`BR-2024-00${String(S.newReqCtr++).padStart(2,'0')}`;
+  S.requests.unshift({
+    id, title, type, status:'created',
+    priority: document.getElementById('nr-pri')?.value||'medium',
+    city, state: document.getElementById('nr-state')?.value||'Gujarat',
+    address:addr, pincode: document.getElementById('nr-pin')?.value||'',
+    requirements:req, createdBy:'marketplace',
+    assignedMIS:null, assignedRecce:null, assignedVendor:null,
+    recce:null, approval:null, vendorWork:null,
+    created:'Today',
+    activities:[{ action:'Request created', by:'marketplace', time:'Just now' }],
+    sla:{ created:'Today' }
+  });
+  S.notifications.unshift({ title:`New: ${title}`, msg:`Branding request ${id} created successfully.`, type:'request_created', read:false, time:'Just now', reqId:id });
+  showToast(`Request ${id} created successfully! 🎉`);
+  renderSidebar(); nav('detail', id);
+}
+
+/* ─── NOTIFICATIONS ─── */
+function renderNotifications() {
+  const typeCol = { request_created:'var(--blu)', assigned:'var(--tel)', recce_completed:'var(--pur)', approved:'var(--grn)', rejected:'var(--red)', assigned_to_vendor:'var(--tel)', work_completed:'var(--grn)' };
+  const unread=S.notifications.filter(n=>!n.read).length;
+  return `
+    <div class="page-header">
+      <div>
+        <div class="ph-title">Notifications</div>
+        ${unread?`<div class="ph-sub" style="color:var(--acc)">${unread} unread</div>`:''}
+      </div>
+      ${unread?`<button class="btn btn-s btn-sm" onclick="markAllRead()">✓ Mark all read</button>`:''}
+    </div>
+    ${S.notifications.length?S.notifications.map((n,i)=>`
+      <div class="notif-item ${n.read?'':'unread'}" onclick="readNotif(${i})">
+        <div class="ndot" style="background:${n.read?'var(--border)':typeCol[n.type]||'var(--acc)'}"></div>
+        <div style="flex:1">
+          <div class="n-title">${n.title}</div>
+          <div class="n-msg">${n.msg}</div>
+          <div class="n-time">${n.time} ${n.reqId?`· <span style="color:var(--acc);cursor:pointer;font-weight:600" onclick="event.stopPropagation();nav('detail','${n.reqId}')">${n.reqId} →</span>`:''}</div>
+        </div>
+        ${!n.read?`<div class="unread-pip"></div>`:''}
+      </div>`).join(''):
+    '<div class="empty"><div class="empty-ico">🔔</div><p>No notifications</p></div>'}`;
+}
+
+function markAllRead(){ S.notifications.forEach(n=>n.read=true); renderSidebar(); renderContent(); showToast('All marked as read'); }
+function readNotif(i){ S.notifications[i].read=true; renderSidebar(); renderContent(); }
+
+/* ─── TEAM ─── */
+function renderTeam() {
+  return `
+    <div class="ph-title" style="margin-bottom:18px">Team Members</div>
+    <div class="team-grid">
+      ${Object.values(S.users).map(u=>`
+        <div class="team-card">
+          <div class="team-ava" style="background:${u.bg};color:${u.col}">${u.name[0]}</div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:3px">${u.name}</div>
+          <div style="font-size:12px;color:var(--txt3);margin-bottom:10px">${u.email}</div>
+          <span class="badge" style="background:${u.bg};color:${u.col}">${u.lbl}</span>
+          ${u.role==='vendor'?`<div style="font-size:12px;color:var(--txt2);margin-top:8px">FastPrint Solutions<br>⭐ 4.5 · 23 completed jobs</div>`:''}
+        </div>`).join('')}
+    </div>`;
+}
+
+/* ─── PROFILE ─── */
+function renderProfile() {
+  const u=S.users[S.role];
+  return `
+    <div class="ph-title" style="margin-bottom:20px">My Profile</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:800px">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+          <div style="width:60px;height:60px;border-radius:50%;background:${u.bg};color:${u.col};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0">${u.name[0]}</div>
+          <div>
+            <div style="font-size:18px;font-weight:700">${u.name}</div>
+            <div style="font-size:13px;color:var(--txt2)">${u.email}</div>
+            <span class="badge" style="background:${u.bg};color:${u.col};margin-top:6px">${u.lbl}</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Member Since</div><div style="font-size:13px">Jan 2024</div></div>
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Last Login</div><div style="font-size:13px">Today, 09:00</div></div>
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Status</div><span class="badge" style="background:var(--grnd);color:var(--grn)">✓ Active</span></div>
+          ${u.role==='vendor'?`<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Completed Jobs</div><div style="font-size:13px;font-weight:700;color:var(--grn)">23</div></div>`:''}
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec">🔒 Change Password</div>
+        <div class="fld"><label>Current Password</label><input type="password" value="password123" style="opacity:.5"/></div>
+        <div class="fld"><label>New Password</label><input type="password" placeholder="Min. 6 characters"/></div>
+        <div class="fld"><label>Confirm Password</label><input type="password" placeholder="Repeat new password"/></div>
+        <button class="btn btn-p btn-sm" onclick="showToast('Password updated successfully!')">💾 Update Password</button>
+      </div>
+    </div>`;
+}
+
+/* ═══════════════ BOOT ════════════════ */
+renderSidebar();
+renderContent();
+</script>
+</body>
+</html>

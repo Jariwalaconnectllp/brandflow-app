@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="BrandFlow — Branding Process Management System"/>
+<title>BrandFlow — Branding Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* ── LIGHT GREEN + LAVENDER PALETTE ── */
+  --bg:#f0f4f0;
+  --bg2:#ffffff;
+  --bgc:#ffffff;
+  --bgs:#e8f0e8;
+  --sidebar:#2d5a3d;
+  --sidebar2:#245033;
+  --sidebar-hover:rgba(255,255,255,0.1);
+  --sidebar-active:rgba(255,255,255,0.18);
+  --sidebar-txt:rgba(255,255,255,0.75);
+  --sidebar-txt-active:#ffffff;
+
+  --border:#d4e8d4;
+  --border2:#b8d4b8;
+  --shadow:0 1px 3px rgba(45,90,61,0.08);
+  --shadow-md:0 4px 16px rgba(45,90,61,0.1);
+  --shadow-lg:0 8px 32px rgba(45,90,61,0.12);
+
+  --txt:#1a2e1a;
+  --txt2:#4a6b4a;
+  --txt3:#7a9b7a;
+
+  /* Accent colours */
+  --grn:#2d7a4a;       --grnd:#e6f4ec;      --grn-mid:#4a9b6b;
+  --lav:#7c6bc9;       --lavd:#ede9ff;      --lav-mid:#9b8de0;
+  --mint:#3aab6b;      --mintd:#e0f5ea;
+  --sage:#5a8a5a;      --saged:#eef4ee;
+  --teal:#2a9d8f;      --teald:#e0f5f3;
+  --blu:#3a7bd5;       --blud:#e8f0fb;
+  --org:#e8833a;       --orgd:#fdf0e6;
+  --red:#d63031;       --redd:#fdeaea;
+  --yel:#f0a500;       --yeld:#fdf6e0;
+  --pur:#6c5ce7;       --purd:#f0eeff;
+
+  --acc:var(--grn);    --accd:var(--grnd);  --acch:var(--grn-mid);
+
+  --r:8px;--rl:12px;--rxl:18px;
+}
+
+html,body{height:100%;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bgs)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--txt3)}
+
+/* ════════════════════ LOGIN ════════════════════ */
+#login-screen{display:flex;min-height:100vh;background:var(--bg)}
+.login-left{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:linear-gradient(135deg,#2d5a3d 0%,#4a7c5a 40%,#6b5eb8 100%);position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.login-left-content{position:relative;z-index:1;max-width:400px;color:#fff}
+.ll-logo{display:flex;align-items:center;gap:12px;margin-bottom:40px}
+.ll-logo-icon{width:48px;height:48px;background:rgba(255,255,255,.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid rgba(255,255,255,.3)}
+.ll-logo-text{font-size:26px;font-weight:800;letter-spacing:-0.04em}
+.ll-title{font-size:34px;font-weight:800;line-height:1.2;letter-spacing:-0.03em;margin-bottom:14px}
+.ll-sub{font-size:15px;opacity:.8;line-height:1.6;margin-bottom:32px}
+.ll-feature{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;opacity:.9}
+.ll-feature-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6);flex-shrink:0}
+.ll-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:36px}
+.ll-stat{background:rgba(255,255,255,.1);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,.15)}
+.ll-stat-num{font-size:22px;font-weight:800;margin-bottom:2px}
+.ll-stat-lbl{font-size:11px;opacity:.7}
+
+.login-right{width:480px;display:flex;align-items:center;justify-content:center;padding:40px;background:#fff}
+.login-card{width:100%;max-width:380px}
+.lc-header{margin-bottom:30px}
+.lc-title{font-size:26px;font-weight:800;letter-spacing:-0.03em;color:var(--txt);margin-bottom:6px}
+.lc-sub{font-size:13px;color:var(--txt2)}
+.login-form{display:flex;flex-direction:column;gap:14px}
+.fld label{display:block;font-size:12px;font-weight:700;color:var(--txt2);margin-bottom:5px;letter-spacing:.02em;text-transform:uppercase}
+.fld input,.fld select,.fld textarea{width:100%;background:var(--bg);border:1.5px solid var(--border);color:var(--txt);border-radius:var(--r);padding:11px 14px;font-size:14px;outline:none;font-family:inherit;transition:all .18s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--grn);box-shadow:0 0 0 3px var(--grnd);background:#fff}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--txt3)}
+.fld select option{background:#fff;color:var(--txt)}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:44px}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--txt3);cursor:pointer;font-size:15px;padding:4px;border-radius:4px}
+.eye-btn:hover{color:var(--txt);background:var(--bgs)}
+.login-btn{background:linear-gradient(135deg,var(--grn),var(--lav));color:#fff;font-weight:700;font-size:15px;padding:13px;border-radius:var(--r);border:none;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:all .2s;margin-top:4px;letter-spacing:.01em}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(45,90,61,.3)}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.login-error{background:var(--redd);border:1.5px solid rgba(214,48,49,.25);color:var(--red);border-radius:var(--r);padding:10px 14px;font-size:13px;text-align:center;font-weight:500}
+/* image upload component */
+.img-upload-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.img-thumb-wrap{position:relative;width:80px;height:80px}
+.img-thumb{width:80px;height:80px;border-radius:var(--r);object-fit:cover;border:1.5px solid var(--border);cursor:pointer;transition:all .15s}
+.img-thumb:hover{transform:scale(1.04);border-color:var(--grn)}
+.img-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--red);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;border:2px solid #fff;line-height:1}
+.img-add-btn{width:80px;height:80px;border-radius:var(--r);border:2px dashed var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--txt3);font-size:11px;gap:4px;transition:all .15s;background:var(--bgs)}
+.img-add-btn:hover{border-color:var(--grn);color:var(--grn);background:var(--grnd)}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:zoom-out;backdrop-filter:blur(4px)}
+.lightbox img{max-width:90vw;max-height:90vh;border-radius:var(--rl);box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ════════════════════ APP SHELL ════════════════════ */
+#app-screen{display:none;height:100vh;overflow:hidden}
+#app-screen.visible{display:flex}
+.app{display:flex;height:100vh;overflow:hidden;width:100%}
+
+/* SIDEBAR */
+.sidebar{width:230px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;transition:width .25s;box-shadow:3px 0 12px rgba(0,0,0,.1)}
+.sidebar.collapsed{width:62px}
+.sidebar .logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar .logo-icon{width:34px;height:34px;background:rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;border:1px solid rgba(255,255,255,.25)}
+.sidebar .logo-text{font-size:17px;font-weight:800;letter-spacing:-0.04em;color:#fff;white-space:nowrap}
+.user-chip{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05)}
+.ava{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,.3)}
+.user-meta{display:flex;flex-direction:column;overflow:hidden}
+.u-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+.u-role{font-size:10px;font-weight:500;color:rgba(255,255,255,.6)}
+nav{flex:1;padding:10px 8px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-i{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r);color:var(--sidebar-txt);cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;white-space:nowrap}
+.nav-i:hover{background:var(--sidebar-hover);color:#fff}
+.nav-i.active{background:var(--sidebar-active);color:#fff;font-weight:700}
+.nav-i.active .nav-icon{transform:scale(1.1)}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;position:relative;transition:transform .15s}
+.nav-lbl{flex:1}
+.notif-pip{position:absolute;top:-5px;right:-6px;min-width:15px;height:15px;background:#ef4444;border-radius:8px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff;padding:0 3px;border:1.5px solid var(--sidebar)}
+.nav-section-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;padding:12px 14px 4px;white-space:nowrap}
+.sidebar-bottom{padding:10px 8px;border-top:1px solid rgba(255,255,255,.08)}
+.logout-btn{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r);color:var(--sidebar-txt);cursor:pointer;font-size:13px;font-weight:500;background:none;border:none;font-family:inherit;width:100%;transition:all .15s}
+.logout-btn:hover{background:rgba(239,68,68,.2);color:#fca5a5}
+
+/* MAIN AREA */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:58px;background:#fff;border-bottom:1.5px solid var(--border);flex-shrink:0;gap:12px;box-shadow:var(--shadow)}
+.menu-btn{background:transparent;color:var(--txt2);border:none;padding:7px;border-radius:var(--r);cursor:pointer;font-size:18px;line-height:1;transition:all .15s}
+.menu-btn:hover{background:var(--bgs);color:var(--txt)}
+.page-title{font-size:16px;font-weight:700;color:var(--txt);letter-spacing:-0.01em}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.role-tag{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.04em}
+.content{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+
+/* ════════════════════ COMPONENTS ════════════════════ */
+.card{background:#fff;border:1.5px solid var(--border);border-radius:var(--rl);padding:20px;box-shadow:var(--shadow)}
+.card:hover{box-shadow:var(--shadow-md)}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:#fff;border:1.5px solid var(--border);border-radius:var(--rl);padding:18px;box-shadow:var(--shadow);transition:all .2s}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start}
+.kpi-label{font-size:12px;color:var(--txt2);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi-val{font-size:30px;font-weight:800;letter-spacing:-0.04em;color:var(--txt)}
+.kpi-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.tag{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--bgs);color:var(--txt2);font-weight:500;border:1px solid var(--border)}
+
+.tbl-wrap{border-radius:var(--r);border:1.5px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--bgs)}
+th{padding:10px 15px;text-align:left;font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.07em;border-bottom:1.5px solid var(--border);white-space:nowrap}
+td{padding:13px 15px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.clickable{cursor:pointer;transition:background .12s}
+tr.clickable:hover td{background:var(--grnd)}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--r);font-size:13px;font-weight:600;border:none;transition:all .18s;white-space:nowrap;font-family:inherit;cursor:pointer;letter-spacing:.01em}
+.btn-p{background:linear-gradient(135deg,var(--grn),#4a7c5a);color:#fff;box-shadow:0 2px 8px rgba(45,90,61,.2)}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(45,90,61,.3)}
+.btn-lav{background:linear-gradient(135deg,var(--lav),var(--lav-mid));color:#fff}
+.btn-lav:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(124,107,201,.3)}
+.btn-s{background:#fff;color:var(--txt);border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.btn-s:hover{background:var(--bgs);border-color:var(--border2)}
+.btn-ok{background:var(--mintd);color:var(--mint);border:1.5px solid rgba(58,171,107,.3)}
+.btn-ok:hover{background:rgba(58,171,107,.2)}
+.btn-err{background:var(--redd);color:var(--red);border:1.5px solid rgba(214,48,49,.25)}
+.btn-err:hover{background:rgba(214,48,49,.15)}
+.btn-lav-out{background:var(--lavd);color:var(--lav);border:1.5px solid rgba(124,107,201,.3)}
+.btn-lav-out:hover{background:rgba(124,107,201,.15)}
+.btn-sm{padding:6px 11px;font-size:12px}
+.btn-xs{padding:4px 9px;font-size:11px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+.fld{margin-bottom:13px}
+.sec{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:13px;display:flex;align-items:center;gap:7px;padding-bottom:10px;border-bottom:1.5px solid var(--border)}
+.divider{height:1.5px;background:var(--border);margin:14px 0}
+.mono{font-family:'Space Mono',monospace;font-size:11px}
+.empty{text-align:center;padding:60px 20px;color:var(--txt3)}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);background:none;border:none;cursor:pointer;padding:6px 10px;margin-bottom:14px;transition:all .15s;font-family:inherit;border-radius:var(--r)}
+.back-btn:hover{color:var(--grn);background:var(--grnd)}
+.ph-title{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--txt)}
+.ph-sub{font-size:13px;color:var(--txt2);margin-top:3px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.search-wrap{position:relative;display:flex;align-items:center;flex:1;min-width:200px}
+.search-ico{position:absolute;left:12px;color:var(--txt3);font-size:14px;pointer-events:none}
+.search-inp{padding-left:38px!important;background:#fff!important;border:1.5px solid var(--border)!important;border-radius:var(--r)!important}
+.search-inp:focus{border-color:var(--grn)!important;box-shadow:0 0 0 3px var(--grnd)!important}
+
+/* Workflow */
+.wf{display:flex;align-items:flex-start;overflow-x:auto;padding:6px 0 12px}
+.wf-step{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:84px;opacity:.35;transition:opacity .2s;text-align:center}
+.wf-step.done,.wf-step.active{opacity:1}
+.wf-circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:#fff;color:var(--txt3);transition:all .2s}
+.wf-step.done .wf-circle{background:var(--grnd);border-color:var(--grn);color:var(--grn)}
+.wf-step.active .wf-circle{background:var(--lavd);border-color:var(--lav);color:var(--lav);box-shadow:0 0 0 4px rgba(124,107,201,.15)}
+.wf-lbl{font-size:9px;font-weight:600;color:var(--txt2);line-height:1.3}
+.wf-step.active .wf-lbl{color:var(--lav);font-weight:700}
+.wf-step.done .wf-lbl{color:var(--grn)}
+.wf-role{font-size:8px;color:var(--txt3)}
+.wf-line{width:36px;height:2px;background:var(--border);flex-shrink:0;margin-bottom:26px;transition:background .2s}
+.wf-line.done{background:var(--grn)}
+
+/* Timeline */
+.timeline{display:flex;flex-direction:column}
+.tl{display:flex;gap:10px;padding-bottom:14px;position:relative}
+.tl::before{content:'';position:absolute;left:5px;top:14px;bottom:0;width:2px;background:var(--border);border-radius:1px}
+.tl:last-child::before{display:none}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--grn);flex-shrink:0;margin-top:2px;box-shadow:0 0 0 3px var(--grnd)}
+.tl-body{flex:1}
+.tl-act{font-size:12px;font-weight:600;color:var(--txt)}
+.tl-meta{font-size:11px;color:var(--txt3);margin-top:2px}
+
+/* Detail */
+.detail-layout{display:grid;grid-template-columns:1fr 290px;gap:16px;align-items:start}
+.detail-main{display:flex;flex-direction:column;gap:14px}
+.detail-side{display:flex;flex-direction:column;gap:14px}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.d-row label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px;display:block}
+.d-row p{font-size:13px;color:var(--txt);font-weight:500}
+
+/* Action panels */
+.action-panel{background:linear-gradient(135deg,var(--grnd),var(--lavd));border:1.5px solid rgba(124,107,201,.25);border-radius:var(--rl);padding:20px}
+.action-title{font-size:14px;font-weight:700;color:var(--lav);margin-bottom:16px;display:flex;align-items:center;gap:7px}
+.assign-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
+.assign-row:last-child{border-bottom:none}
+.assign-ava{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.sla-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.sla-row:last-child{border-bottom:none}
+.sla-label{font-size:12px;color:var(--txt2)}
+.sla-date{font-size:11px;color:var(--txt3);font-family:'Space Mono',monospace}
+.dec-btns{display:flex;gap:10px;margin-bottom:14px}
+.dec-btn{flex:1;justify-content:center;padding:12px;border-radius:var(--r);font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;border:2px solid var(--border);background:#fff;color:var(--txt2);cursor:pointer;transition:all .15s;font-family:inherit}
+.dec-btn.approve-sel{border-color:var(--grn);background:var(--grnd);color:var(--grn)}
+.dec-btn.reject-sel{border-color:var(--red);background:var(--redd);color:var(--red)}
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:22px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;background:rgba(255,255,255,.5)}
+.upload-zone:hover{border-color:var(--grn);background:var(--grnd)}
+.img-ph{width:72px;height:72px;border-radius:var(--r);background:var(--bgs);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .15s}
+.img-ph:hover{border-color:var(--grn);transform:scale(1.05)}
+.stat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.stat-chip{border-radius:var(--r);padding:10px 14px;text-align:center;border:1px solid transparent}
+.stat-num{font-size:20px;font-weight:800;line-height:1}
+.stat-lbl{font-size:10px;margin-top:3px;font-weight:600}
+.req-cell{display:flex;flex-direction:column;gap:2px}
+.req-title{font-size:13px;font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt)}
+
+/* Notifications */
+.notif-item{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border-radius:var(--r);border:1.5px solid transparent;margin-bottom:4px;cursor:pointer;transition:all .15s}
+.notif-item:hover{border-color:var(--border);background:var(--bgs)}
+.notif-item.unread{background:linear-gradient(135deg,var(--grnd),var(--lavd));border-color:rgba(124,107,201,.25)}
+.ndot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.n-title{font-size:13px;font-weight:700;margin-bottom:3px;color:var(--txt)}
+.n-msg{font-size:12px;color:var(--txt2);line-height:1.4}
+.n-time{font-size:11px;color:var(--txt3);margin-top:5px}
+.unread-pip{width:8px;height:8px;border-radius:50%;background:var(--lav);flex-shrink:0;box-shadow:0 0 0 3px var(--lavd);margin-top:4px}
+
+/* Team/User cards */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.team-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--rl);padding:22px;text-align:center;box-shadow:var(--shadow);transition:all .2s;position:relative}
+.team-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border2)}
+.team-ava{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;border:3px solid transparent}
+.inactive-badge{position:absolute;top:10px;right:10px}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,46,26,.4);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px;backdrop-filter:blur(6px)}
+.modal{background:#fff;border:1.5px solid var(--border);border-radius:var(--rxl);padding:28px;width:100%;max-width:520px;box-shadow:var(--shadow-lg);animation:modalIn .22s ease}
+@keyframes modalIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:4px;letter-spacing:-0.03em;color:var(--txt)}
+.modal-sub{font-size:13px;color:var(--txt2);margin-bottom:22px}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1.5px solid var(--border)}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;background:var(--bgs);border-radius:var(--r);padding:3px;margin-bottom:20px;border:1.5px solid var(--border)}
+.tab{padding:7px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;color:var(--txt2);transition:all .15s;border:none;background:none;font-family:inherit}
+.tab.active{background:#fff;color:var(--grn);box-shadow:var(--shadow)}
+
+/* Summary row for reports */
+.summary-row{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r);margin-bottom:6px;border:1.5px solid var(--border);background:#fff;transition:all .15s}
+.summary-row:hover{border-color:var(--border2);background:var(--bgs)}
+
+/* Print styles */
+@media print{.sidebar,.topbar,.btn,.action-panel,.back-btn{display:none!important}.content{padding:0}.detail-layout{grid-template-columns:1fr}}
+
+/* Toast */
+#toasts{position:fixed;top:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:9999}
+.toast{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:11px 16px;font-size:13px;font-weight:600;max-width:320px;box-shadow:var(--shadow-md);animation:toastIn .22s ease;color:var(--txt)}
+@keyframes toastIn{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
+.spin{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--grn);border-radius:50%;animation:spinning .6s linear infinite;display:inline-block}
+@keyframes spinning{to{transform:rotate(360deg)}}
+
+@media(max-width:900px){
+  .login-left{display:none}.login-right{width:100%}
+  .sidebar{width:58px}.logo-text,.user-meta,.nav-lbl,.nav-section-label,.sidebar-bottom span{display:none}
+  .kpi-grid{grid-template-columns:1fr 1fr}.detail-layout{grid-template-columns:1fr}
+  .d-grid,.grid-2,.grid-3{grid-template-columns:1fr}
+}
+@media(max-width:600px){.content{padding:14px}.login-right{padding:24px}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ LOGIN SCREEN ══════════════════ -->
+<div id="login-screen">
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="ll-logo">
+        <div class="ll-logo-icon">⚡</div>
+        <span class="ll-logo-text">BrandFlow</span>
+      </div>
+      <div class="ll-title">Branding Process Management</div>
+      <div class="ll-sub">End-to-end workflow tracking for your entire branding operation — from request to completion.</div>
+      <div class="ll-feature"><div class="ll-feature-dot"></div>Role-based access for 5 teams</div>
+      <div class="ll-feature"><div class="ll-feature-dot"></div>Real-time status tracking & notifications</div>
+      <div class="ll-feature"><div class="ll-feature-dot"></div>Recce reports with image uploads</div>
+      <div class="ll-feature"><div class="ll-feature-dot"></div>Admin approval workflow & vendor management</div>
+      <div class="ll-stats">
+        <div class="ll-stat"><div class="ll-stat-num">10</div><div class="ll-stat-lbl">Workflow Steps</div></div>
+        <div class="ll-stat"><div class="ll-stat-num">5</div><div class="ll-stat-lbl">User Roles</div></div>
+        <div class="ll-stat"><div class="ll-stat-num">∞</div><div class="ll-stat-lbl">Requests</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-card">
+      <div class="lc-header">
+        <div class="lc-title">Welcome back 👋</div>
+        <div class="lc-sub">Enter your credentials to access your dashboard</div>
+      </div>
+      <div class="login-form">
+        <div class="fld">
+          <label>Email Address</label>
+          <input id="login-email" type="email" placeholder="you@company.com" autocomplete="email"
+            onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+        </div>
+        <div class="fld">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input id="login-pass" type="password" placeholder="Enter your password" autocomplete="current-password"
+              onkeydown="if(event.key==='Enter')doLogin()"/>
+            <button class="eye-btn" onclick="togglePass()" id="eye-icon">👁</button>
+          </div>
+        </div>
+        <div id="login-err" style="display:none" class="login-error"></div>
+        <button class="login-btn" id="login-btn" onclick="doLogin()">
+          <span id="login-btn-text">Sign In →</span>
+        </button>
+      </div>
+      <div style="margin-top:20px;text-align:center;font-size:12px;color:var(--txt3)">
+        Contact your administrator if you forgot your password.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ APP ══════════════════ -->
+<div id="app-screen">
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">BrandFlow</span>
+    </div>
+    <div class="user-chip" id="user-chip"></div>
+    <nav id="nav"></nav>
+    <div class="sidebar-bottom">
+      <button class="logout-btn" onclick="doLogout()">
+        <span style="font-size:16px">🚪</span>
+        <span class="nav-lbl">Logout</span>
+      </button>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <span class="page-title" id="page-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span class="role-tag" id="role-tag"></span>
+      </div>
+    </header>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+</div>
+
+<div id="toasts"></div>
+<div id="modal-root"></div>
+
+<script>
+/* ══════════ USER DATABASE ══════════ */
+const USERS_DB = [
+  { id:'u1', name:'Vikram Mehta',   email:'admin@brandflow.com',    password:'password123', role:'admin',       phone:'9800000001', active:true, joined:'Jan 2024' },
+  { id:'u2', name:'Priya Sharma',   email:'priya@brandflow.com',    password:'password123', role:'marketplace', phone:'9800000002', active:true, joined:'Jan 2024' },
+  { id:'u3', name:'Rahul Verma',    email:'rahul@brandflow.com',    password:'password123', role:'mis',         phone:'9800000003', active:true, joined:'Feb 2024' },
+  { id:'u4', name:'Amit Singh',     email:'amit@brandflow.com',     password:'password123', role:'recce',       phone:'9800000004', active:true, joined:'Feb 2024' },
+  { id:'u5', name:'FastPrint Co.',  email:'vendor@brandflow.com',   password:'password123', role:'vendor',      phone:'9800000005', active:true, joined:'Mar 2024', vendorInfo:{company:'FastPrint Solutions',rating:4.5,jobs:23,area:'Surat, Ahmedabad'} },
+  { id:'u6', name:'Deepa Nair',     email:'deepa@brandflow.com',    password:'password123', role:'marketplace', phone:'9800000006', active:true, joined:'Mar 2024' },
+  { id:'u7', name:'Suresh Patel',   email:'suresh@brandflow.com',   password:'password123', role:'recce',       phone:'9800000007', active:true, joined:'Mar 2024' },
+  { id:'u8', name:'SignKraft Pvt',  email:'signkraft@brandflow.com',password:'password123', role:'vendor',      phone:'9800000008', active:true, joined:'Mar 2024', vendorInfo:{company:'SignKraft Pvt Ltd',rating:4.2,jobs:11,area:'Surat'} },
+  { id:'u9', name:'Neha Joshi',     email:'neha@brandflow.com',     password:'password123', role:'mis',         phone:'9800000009', active:true, joined:'Mar 2024' },
+];
+
+/* ══════════ STATE ══════════ */
+const S = {
+  loggedIn:false, currentUser:null, page:'dashboard',
+  selReq:null, sidebarOpen:true, filterOpen:false,
+  filterVals:{search:'',status:'',city:'',priority:'',type:''},
+  decisionChoice:'', reportTab:'summary', newReqCtr:7,
+  requests:[
+    { id:'BR-2024-0001', title:'Hoarding at Ring Road Junction', type:'Hoarding',
+      status:'awaiting_approval', priority:'high', city:'Surat', state:'Gujarat',
+      address:'Ring Road, Near Sarthana Junction', pincode:'395006',
+      requirements:'Large 40×20 ft hoarding for product launch. Illuminated preferred. Bidirectional visibility.',
+      createdById:'u2', assignedMISId:'u3', assignedRecceId:'u4', assignedVendorId:null,
+      recce:{notes:'Site accessible. Power within 30m. No obstructions.',cost:85000,condition:'Good',feasibility:'Feasible',completedAt:'21 Mar 2024',images:[]},
+      approval:null, vendorWork:null, created:'18 Mar 2024',
+      activities:[
+        {action:'Request created',byId:'u2',time:'18 Mar, 09:00'},
+        {action:'Assigned to Recce: Amit Singh',byId:'u3',time:'18 Mar, 11:30'},
+        {action:'Recce in progress',byId:'u4',time:'20 Mar, 10:00'},
+        {action:'Recce completed – submitted for approval',byId:'u4',time:'21 Mar, 16:45'},
+      ], sla:{created:'18 Mar',toRecce:'18 Mar',recceCompleted:'21 Mar'} },
+    { id:'BR-2024-0002', title:'LED Signage — VR Mall Entrance', type:'LED Signage',
+      status:'assigned_to_recce', priority:'medium', city:'Surat', state:'Gujarat',
+      address:'VR Surat Mall, Dumas Road', pincode:'395007',
+      requirements:'LED display 10×6 ft at main entrance. Full color, animation, weatherproof.',
+      createdById:'u2', assignedMISId:'u3', assignedRecceId:'u4', assignedVendorId:null,
+      recce:null, approval:null, vendorWork:null, created:'22 Mar 2024',
+      activities:[{action:'Request created',byId:'u2',time:'22 Mar, 08:00'},{action:'Assigned to Recce',byId:'u3',time:'22 Mar, 14:00'}],
+      sla:{created:'22 Mar',toRecce:'22 Mar'} },
+    { id:'BR-2024-0003', title:'Wall Painting — Citylight Area', type:'Wall Painting',
+      status:'work_completed', priority:'low', city:'Surat', state:'Gujarat',
+      address:'Citylight, Parle Point', pincode:'395007',
+      requirements:'20×15 ft wall painting. Brand colors and logo guidelines.',
+      createdById:'u6', assignedMISId:'u3', assignedRecceId:'u7', assignedVendorId:'u5',
+      recce:{notes:'Wall condition excellent. Easy scaffold access.',cost:35000,condition:'Excellent',feasibility:'Feasible',completedAt:'08 Mar 2024',images:[]},
+      approval:{byId:'u1',budget:35000,comment:'Approved. Standard guidelines apply.',date:'10 Mar 2024'},
+      vendorWork:{notes:'Completed as per specs. Brand elements verified.',actualCost:33000,completedAt:'16 Mar 2024',images:[]},
+      created:'05 Mar 2024',
+      activities:[
+        {action:'Request created',byId:'u6',time:'05 Mar, 09:00'},
+        {action:'Assigned to Recce: Suresh Patel',byId:'u3',time:'05 Mar, 11:00'},
+        {action:'Recce completed',byId:'u7',time:'08 Mar, 15:00'},
+        {action:'Request approved by Admin',byId:'u1',time:'10 Mar, 10:00'},
+        {action:'Assigned to Vendor: FastPrint',byId:'u3',time:'11 Mar, 09:30'},
+        {action:'Work completed by vendor',byId:'u5',time:'16 Mar, 17:00'},
+      ], sla:{created:'05 Mar',toRecce:'05 Mar',recceCompleted:'08 Mar',approvalDecision:'10 Mar',toVendor:'11 Mar',workCompleted:'16 Mar'} },
+    { id:'BR-2024-0004', title:'Flex Banner — Adajan Square', type:'Flex Banner',
+      status:'created', priority:'urgent', city:'Surat', state:'Gujarat',
+      address:'Adajan Char Rasta, Near HDFC Bank', pincode:'395009',
+      requirements:'18×10 ft flex banner. Product launch event. Deadline: 5 days.',
+      createdById:'u2', assignedMISId:null, assignedRecceId:null, assignedVendorId:null,
+      recce:null, approval:null, vendorWork:null, created:'23 Mar 2024',
+      activities:[{action:'Request created',byId:'u2',time:'23 Mar, 08:30'}],
+      sla:{created:'23 Mar'} },
+    { id:'BR-2024-0005', title:'Glow Sign — SG Highway', type:'Glow Sign Board',
+      status:'approved', priority:'high', city:'Ahmedabad', state:'Gujarat',
+      address:'SG Highway, Bodakdev', pincode:'380054',
+      requirements:'8×4 ft glow sign. LED backlit, dual-sided, company logo.',
+      createdById:'u2', assignedMISId:'u3', assignedRecceId:'u4', assignedVendorId:null,
+      recce:{notes:'Premium visibility. High traffic. Power available.',cost:55000,condition:'Excellent',feasibility:'Feasible',completedAt:'15 Mar 2024',images:[]},
+      approval:{byId:'u1',budget:55000,comment:'Approved. High priority — expedite.',date:'17 Mar 2024'},
+      vendorWork:null, created:'13 Mar 2024',
+      activities:[
+        {action:'Request created',byId:'u2',time:'13 Mar, 10:00'},
+        {action:'Assigned to Recce',byId:'u3',time:'13 Mar, 12:00'},
+        {action:'Recce completed',byId:'u4',time:'15 Mar, 14:00'},
+        {action:'Approved by Admin',byId:'u1',time:'17 Mar, 09:00'},
+      ], sla:{created:'13 Mar',toRecce:'13 Mar',recceCompleted:'15 Mar',approvalDecision:'17 Mar'} },
+    { id:'BR-2024-0006', title:'Neon Sign — Alpha One Mall', type:'Neon Sign',
+      status:'work_in_progress', priority:'medium', city:'Ahmedabad', state:'Gujarat',
+      address:'Alpha One Mall, Vastrapur', pincode:'380015',
+      requirements:'Custom neon 6×3 ft. Brand colors orange and white.',
+      createdById:'u6', assignedMISId:'u3', assignedRecceId:'u7', assignedVendorId:'u5',
+      recce:{notes:'Indoor mall. Controlled environment.',cost:42000,condition:'Excellent',feasibility:'Feasible',completedAt:'10 Mar 2024',images:[]},
+      approval:{byId:'u1',budget:42000,comment:'Approved.',date:'12 Mar 2024'},
+      vendorWork:null, created:'08 Mar 2024',
+      activities:[
+        {action:'Request created',byId:'u6',time:'08 Mar, 09:00'},
+        {action:'Assigned to Recce',byId:'u3',time:'08 Mar, 10:00'},
+        {action:'Recce completed',byId:'u7',time:'10 Mar, 15:00'},
+        {action:'Approved',byId:'u1',time:'12 Mar, 10:00'},
+        {action:'Assigned to Vendor',byId:'u3',time:'13 Mar, 09:00'},
+        {action:'Work started by vendor',byId:'u5',time:'14 Mar, 08:00'},
+      ], sla:{created:'08 Mar',toRecce:'08 Mar',recceCompleted:'10 Mar',approvalDecision:'12 Mar',toVendor:'13 Mar'} },
+  ],
+  notifications:{}
+};
+
+/* ══════════ CONSTANTS ══════════ */
+const STATUS = {
+  created:            {label:'Created',           col:'#64748b',bg:'#f1f5f9',ico:'🆕'},
+  assigned_to_recce:  {label:'Assigned to Recce', col:'#3a7bd5',bg:'#e8f0fb',ico:'📋'},
+  recce_in_progress:  {label:'Recce In Progress', col:'#e8833a',bg:'#fdf0e6',ico:'🔍'},
+  recce_completed:    {label:'Recce Completed',   col:'#7c6bc9',bg:'#ede9ff',ico:'✅'},
+  awaiting_approval:  {label:'Awaiting Approval', col:'#d97706',bg:'#fef3c7',ico:'⏳'},
+  approved:           {label:'Approved',           col:'#2d7a4a',bg:'#e6f4ec',ico:'✔️'},
+  rejected:           {label:'Rejected',           col:'#d63031',bg:'#fdeaea',ico:'❌'},
+  assigned_to_vendor: {label:'Assigned to Vendor',col:'#0d9488',bg:'#ccfbf1',ico:'🏭'},
+  work_in_progress:   {label:'Work In Progress',  col:'#e8833a',bg:'#fdf0e6',ico:'🔨'},
+  work_completed:     {label:'Work Completed',    col:'#2d7a4a',bg:'#e6f4ec',ico:'🎉'},
+};
+const PRI = {
+  low:    {col:'#64748b',bg:'#f1f5f9'},
+  medium: {col:'#3a7bd5',bg:'#e8f0fb'},
+  high:   {col:'#e8833a',bg:'#fdf0e6'},
+  urgent: {col:'#d63031',bg:'#fdeaea'},
+};
+const ROLE_CFG = {
+  admin:       {lbl:'Admin',       col:'#2d5a3d',bg:'#e6f4ec',ico:'🔑'},
+  marketplace: {lbl:'Marketplace', col:'#3a7bd5',bg:'#e8f0fb',ico:'🛒'},
+  mis:         {lbl:'MIS Team',    col:'#7c6bc9',bg:'#ede9ff',ico:'📊'},
+  recce:       {lbl:'Recce Team',  col:'#0d9488',bg:'#ccfbf1',ico:'🔍'},
+  vendor:      {lbl:'Vendor',      col:'#2d7a4a',bg:'#e6f4ec',ico:'🏭'},
+};
+const WF_STEPS=[
+  {key:'created',           lbl:'Request\nCreated',    role:'Marketplace'},
+  {key:'assigned_to_recce', lbl:'Assigned\nRecce',     role:'MIS'},
+  {key:'recce_in_progress', lbl:'Recce\nActive',       role:'Recce'},
+  {key:'awaiting_approval', lbl:'Awaiting\nApproval',  role:'Admin'},
+  {key:'approved',          lbl:'Approved',             role:'Admin'},
+  {key:'assigned_to_vendor',lbl:'Assigned\nVendor',    role:'MIS'},
+  {key:'work_completed',    lbl:'Work\nDone',           role:'Vendor'},
+];
+const STATUS_ORDER=['created','assigned_to_recce','recce_in_progress','recce_completed','awaiting_approval','approved','assigned_to_vendor','work_in_progress','work_completed'];
+const NAV_ITEMS=[
+  {id:'dashboard',ico:'📊',lbl:'Dashboard'},
+  {id:'requests', ico:'📁',lbl:'Requests'},
+  {id:'new',      ico:'➕',lbl:'New Request',roles:['marketplace','admin']},
+  {id:'notifs',   ico:'🔔',lbl:'Notifications'},
+  {id:'reports',  ico:'📈',lbl:'Reports',roles:['admin','mis']},
+  {id:'team',     ico:'👥',lbl:'Team',roles:['admin','mis']},
+  {id:'users',    ico:'⚙️',lbl:'User Management',roles:['admin']},
+  {id:'profile',  ico:'👤',lbl:'My Profile'},
+];
+const BRANDING_TYPES=['Hoarding','Flex Banner','LED Signage','Wall Painting','Glow Sign Board','Standee','Vehicle Wrap','Digital Display','Neon Sign','Other'];
+const STATES=['Gujarat','Maharashtra','Rajasthan','Delhi','Karnataka','Tamil Nadu','Uttar Pradesh','West Bengal','Telangana','Madhya Pradesh','Punjab','Other'];
+
+/* ══════════ HELPERS ══════════ */
+const fc=n=>n?'₹'+Number(n).toLocaleString('en-IN'):'—';
+const sbadge=s=>{const c=STATUS[s]||{label:s,col:'#888',bg:'#f1f5f9',ico:'•'};return`<span class="badge" style="background:${c.bg};color:${c.col};border:1px solid ${c.col}22">${c.ico} ${c.label}</span>`;};
+const pbadge=p=>{const c=PRI[p]||PRI.medium;return`<span class="badge" style="background:${c.bg};color:${c.col};border:1px solid ${c.col}22;text-transform:capitalize">${p}</span>`;};
+const stepIdx=s=>STATUS_ORDER.indexOf(s);
+const findUser=id=>USERS_DB.find(u=>u.id===id);
+const uname=id=>findUser(id)?.name||'—';
+const rc=role=>ROLE_CFG[role]||{lbl:role,col:'#888',bg:'#f1f5f9',ico:'👤'};
+const cu=()=>S.currentUser;
+const today=()=>new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+const getMyNotifs=()=>{if(!S.notifications[cu()?.id])S.notifications[cu().id]=[];return S.notifications[cu().id];};
+const addNotif=(toIds,data)=>{toIds.forEach(tid=>{if(!S.notifications[tid])S.notifications[tid]=[];S.notifications[tid].unshift({...data,read:false,time:'Just now'});});};
+
+function showToast(msg,type='success'){
+  const cols={success:'#2d7a4a',error:'#d63031',info:'#7c6bc9'};
+  const icos={success:'✅',error:'❌',info:'ℹ️'};
+  const el=document.createElement('div');
+  el.className='toast';
+  el.style.borderLeft=`4px solid ${cols[type]}`;
+  el.innerHTML=`${icos[type]} ${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>{el.style.cssText+='opacity:0;transform:translateX(20px);transition:all .22s';setTimeout(()=>el.remove(),220);},3000);
+}
+
+/* ══════════ IMAGE UPLOAD HELPERS ══════════ */
+// S.imgStore holds temporary base64 arrays by key between renders
+if(!window.IMG_STORE) window.IMG_STORE={};
+
+function previewImages(input, previewId, storeKey) {
+  const files = Array.from(input.files);
+  if(!files.length) return;
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  const allowed = ['image/jpeg','image/jpg','image/png','image/webp','image/gif','application/pdf'];
+
+  if(!window.IMG_STORE[storeKey]) window.IMG_STORE[storeKey]=[];
+
+  let rejected=0;
+  const promises = files.map(file=>{
+    if(!allowed.includes(file.type)){rejected++;return null;}
+    if(file.size>maxSize){showToast(`${file.name} is too large (max 5MB)`,'error');return null;}
+    return new Promise(res=>{
+      if(file.type==='application/pdf'){
+        // Show PDF icon instead of image
+        res({dataUrl:'pdf', name:file.name});
+        return;
+      }
+      const reader=new FileReader();
+      reader.onload=e=>res({dataUrl:e.target.result, name:file.name});
+      reader.readAsDataURL(file);
+    });
+  });
+
+  if(rejected>0) showToast(`${rejected} file(s) skipped — only images and PDFs allowed`,'error');
+
+  Promise.all(promises).then(results=>{
+    results.filter(Boolean).forEach(r=>window.IMG_STORE[storeKey].push(r));
+    const preview=document.getElementById(previewId);
+    if(!preview) return;
+    preview.innerHTML = window.IMG_STORE[storeKey].map((img,i)=>`
+      <div class="img-thumb-wrap">
+        ${img.dataUrl==='pdf'
+          ?`<div class="img-thumb" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fdeaea;border-color:#d63031;font-size:10px;color:#d63031;gap:3px"><span style="font-size:22px">📄</span>${img.name.substring(0,8)}</div>`
+          :`<img class="img-thumb" src="${img.dataUrl}" title="${img.name}" onclick="openLightbox('${img.dataUrl}')" />`
+        }
+        <div class="img-remove" onclick="removeImg('${storeKey}',${i},'${previewId}')">✕</div>
+      </div>`).join('');
+    if(window.IMG_STORE[storeKey].length>0)
+      showToast(`${window.IMG_STORE[storeKey].length} file(s) ready to attach`,'success');
+  });
+  // Reset input so same files can be re-added if removed
+  input.value='';
+}
+
+function removeImg(storeKey, idx, previewId){
+  if(!window.IMG_STORE[storeKey]) return;
+  window.IMG_STORE[storeKey].splice(idx,1);
+  const preview=document.getElementById(previewId);
+  if(!preview) return;
+  preview.innerHTML = window.IMG_STORE[storeKey].map((img,i)=>`
+    <div class="img-thumb-wrap">
+      ${img.dataUrl==='pdf'
+        ?`<div class="img-thumb" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fdeaea;border-color:#d63031;font-size:10px;color:#d63031;gap:3px"><span style="font-size:22px">📄</span>${img.name.substring(0,8)}</div>`
+        :`<img class="img-thumb" src="${img.dataUrl}" title="${img.name}" onclick="openLightbox('${img.dataUrl}')" />`
+      }
+      <div class="img-remove" onclick="removeImg('${storeKey}',${i},'${previewId}')">✕</div>
+    </div>`).join('');
+}
+
+function openLightbox(src){
+  if(!src||src==='pdf') return;
+  const lb=document.createElement('div');
+  lb.className='lightbox';
+  lb.onclick=()=>lb.remove();
+  lb.innerHTML=`<img src="${src}"/><button class="lightbox-close" onclick="this.parentElement.remove()">✕</button>`;
+  document.body.appendChild(lb);
+}
+
+function getStoredImgs(storeKey){
+  return (window.IMG_STORE[storeKey]||[]).filter(i=>i.dataUrl!=='pdf').map(i=>i.dataUrl);
+}
+function clearStore(storeKey){ window.IMG_STORE[storeKey]=[]; }
+
+/* ══════════ AUTH ══════════ */
+function togglePass(){const i=document.getElementById('login-pass'),e=document.getElementById('eye-icon');i.type=i.type==='password'?'text':'password';e.textContent=i.type==='password'?'👁':'🙈';}
+function toggleSidebar(){S.sidebarOpen=!S.sidebarOpen;document.getElementById('sidebar').classList.toggle('collapsed',!S.sidebarOpen);}
+
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const errEl=document.getElementById('login-err');
+  const btnEl=document.getElementById('login-btn');
+  const txtEl=document.getElementById('login-btn-text');
+  errEl.style.display='none';btnEl.disabled=true;
+  txtEl.innerHTML='<div class="spin"></div> Signing in…';
+  setTimeout(()=>{
+    const user=USERS_DB.find(u=>u.email===email&&u.password===pass);
+    if(!user){errEl.textContent='❌ Invalid email or password. Please check and try again.';errEl.style.display='block';btnEl.disabled=false;txtEl.textContent='Sign In →';return;}
+    if(!user.active){errEl.textContent='⛔ Your account is deactivated. Contact the Admin.';errEl.style.display='block';btnEl.disabled=false;txtEl.textContent='Sign In →';return;}
+    S.loggedIn=true;S.currentUser=user;S.page='dashboard';
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-screen').classList.add('visible');
+    renderSidebar();renderContent();
+    showToast(`Welcome, ${user.name.split(' ')[0]}! 👋`);
+  },500);
+}
+
+function doLogout(){
+  S.loggedIn=false;S.currentUser=null;S.page='dashboard';S.selReq=null;
+  document.getElementById('app-screen').classList.remove('visible');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-err').style.display='none';
+  document.getElementById('login-btn').disabled=false;
+  document.getElementById('login-btn-text').textContent='Sign In →';
+}
+
+/* ══════════ SIDEBAR ══════════ */
+function renderSidebar(){
+  const u=cu();if(!u)return;
+  const r=rc(u.role);
+  document.getElementById('user-chip').innerHTML=`
+    <div class="ava" style="background:${r.bg};color:${r.col}">${u.name[0]}</div>
+    <div class="user-meta"><span class="u-name">${u.name}</span><span class="u-role">${r.ico} ${r.lbl}</span></div>`;
+  const unread=getMyNotifs().filter(n=>!n.read).length;
+  const items=NAV_ITEMS.filter(i=>!i.roles||i.roles.includes(u.role));
+  document.getElementById('nav').innerHTML=items.map(i=>`
+    <div class="nav-i ${S.page===i.id?'active':''}" onclick="nav('${i.id}')">
+      <span class="nav-icon">${i.ico}${i.id==='notifs'&&unread>0?`<span class="notif-pip">${unread}</span>`:''}</span>
+      <span class="nav-lbl">${i.lbl}</span>
+    </div>`).join('');
+  const r2=rc(u.role);
+  document.getElementById('role-tag').style.cssText=`background:${r2.bg};color:${r2.col}`;
+  document.getElementById('role-tag').textContent=`${r2.ico} ${r2.lbl}`;
+}
+
+/* ══════════ NAVIGATION ══════════ */
+function nav(page,reqId=null){
+  S.page=page;if(reqId)S.selReq=reqId;S.decisionChoice='';
+  const TITLES={dashboard:'Dashboard',requests:'All Requests',new:'New Request',notifs:'Notifications',reports:'Reports & Analytics',team:'Team Members',users:'User Management',profile:'My Profile',detail:'Request Detail'};
+  document.getElementById('page-title').textContent=TITLES[page]||'BrandFlow';
+  renderSidebar();renderContent();
+}
+
+/* ══════════ CONTENT ROUTER ══════════ */
+function renderContent(){
+  const pages={dashboard:renderDashboard,requests:renderRequests,new:renderNewRequest,notifs:renderNotifications,reports:renderReports,team:renderTeam,users:renderUserManagement,profile:renderProfile,detail:renderDetail};
+  document.getElementById('content').innerHTML=(pages[S.page]||renderDashboard)();
+}
+
+function getMyRequests(){
+  const u=cu();
+  return S.requests.filter(r=>{
+    if(u.role==='admin'||u.role==='mis') return true;
+    if(u.role==='marketplace') return r.createdById===u.id;
+    if(u.role==='recce') return r.assignedRecceId===u.id;
+    if(u.role==='vendor') return r.assignedVendorId===u.id;
+    return false;
+  });
+}
+
+/* ══════════ DASHBOARD ══════════ */
+function renderDashboard(){
+  const u=cu(),r=rc(u.role);
+  const mine=getMyRequests();
+  const byStatus={};mine.forEach(req=>{byStatus[req.status]=(byStatus[req.status]||0)+1;});
+  const total=mine.length,completed=mine.filter(r=>r.status==='work_completed').length,
+        pending=mine.filter(r=>r.status==='awaiting_approval').length,
+        active=mine.filter(r=>!['work_completed','rejected'].includes(r.status)).length;
+
+  const chips=Object.entries(STATUS).map(([k,v])=>{const n=byStatus[k]||0;if(!n)return'';
+    return`<div class="stat-chip" style="background:${v.bg};border-color:${v.col}22"><div class="stat-num" style="color:${v.col}">${n}</div><div class="stat-lbl" style="color:${v.col}">${v.label}</div></div>`;
+  }).join('');
+
+  // Urgent/pending work cards for role-specific alerts
+  const alerts=[];
+  if(u.role==='admin'||u.role==='mis'){
+    const urgents=mine.filter(r=>r.priority==='urgent'&&r.status!=='work_completed'&&r.status!=='rejected');
+    if(urgents.length) alerts.push(`<div style="background:linear-gradient(135deg,#fdf0e6,#fdeaea);border:1.5px solid rgba(232,131,58,.3);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-size:20px">🚨</span><div><div style="font-weight:700;color:#e8833a">${urgents.length} Urgent Request${urgents.length>1?'s':''}</div><div style="font-size:12px;color:#a0613a">${urgents.map(r=>`<span onclick="nav('detail','${r.id}')" style="cursor:pointer;text-decoration:underline">${r.id}</span>`).join(', ')}</div></div></div>`);
+  }
+  if(u.role==='recce'){
+    const assigned=mine.filter(r=>['assigned_to_recce','recce_in_progress'].includes(r.status));
+    if(assigned.length) alerts.push(`<div style="background:var(--lavd);border:1.5px solid rgba(124,107,201,.3);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-size:20px">📋</span><div><div style="font-weight:700;color:var(--lav)">${assigned.length} Site Visit${assigned.length>1?'s':''} Pending</div><div style="font-size:12px;color:#6b5cb8">Click on requests to submit your recce reports</div></div></div>`);
+  }
+  if(u.role==='vendor'){
+    const wip=mine.filter(r=>['assigned_to_vendor','work_in_progress'].includes(r.status));
+    if(wip.length) alerts.push(`<div style="background:var(--grnd);border:1.5px solid rgba(45,90,61,.2);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px"><span style="font-size:20px">🔨</span><div><div style="font-weight:700;color:var(--grn)">${wip.length} Work Order${wip.length>1?'s':''} Active</div><div style="font-size:12px;color:#3a6b3a">Upload completion photos when done</div></div></div>`);
+  }
+
+  const rows=mine.slice(0,7).map(req=>`
+    <tr class="clickable" onclick="nav('detail','${req.id}')">
+      <td><span class="mono" style="color:var(--grn);background:var(--grnd);padding:2px 7px;border-radius:4px">${req.id}</span></td>
+      <td><div class="req-cell"><div class="req-title">${req.title}</div><div style="font-size:11px;color:var(--txt3)">${uname(req.createdById)}</div></div></td>
+      <td style="font-size:12px;color:var(--txt2)">📍 ${req.city}</td>
+      <td>${sbadge(req.status)}</td>
+      <td>${pbadge(req.priority)}</td>
+    </tr>`).join('');
+
+  return `
+    <div class="page-header">
+      <div><div class="ph-title">Good day, ${u.name.split(' ')[0]} ${r.ico}</div><div class="ph-sub">${r.lbl} Dashboard · ${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div></div>
+      ${['marketplace','admin'].includes(u.role)?`<button class="btn btn-p" onclick="nav('new')">➕ New Request</button>`:''}
+    </div>
+    ${alerts.join('')}
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">My Requests</div><div class="kpi-val">${total}</div></div><div class="kpi-ico" style="background:var(--blud);color:var(--blu)">📋</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Pending Approval</div><div class="kpi-val" style="color:var(--yel)">${pending}</div></div><div class="kpi-ico" style="background:var(--yeld);color:var(--yel)">⏳</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Completed</div><div class="kpi-val" style="color:var(--grn)">${completed}</div></div><div class="kpi-ico" style="background:var(--grnd);color:var(--grn)">✅</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Active</div><div class="kpi-val" style="color:var(--org)">${active}</div></div><div class="kpi-ico" style="background:var(--orgd);color:var(--org)">🔄</div></div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="sec">📊 Status Overview</div>
+      <div class="stat-chips">${chips||`<span style="color:var(--txt3)">No requests yet.</span>`}</div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="sec" style="margin-bottom:0;border:none;padding:0">Recent Activity</div>
+        <button class="btn btn-s btn-sm" onclick="nav('requests')">View All →</button>
+      </div>
+      ${rows?`<div class="tbl-wrap"><table><thead><tr><th>Request #</th><th>Title</th><th>Location</th><th>Status</th><th>Priority</th></tr></thead><tbody>${rows}</tbody></table></div>`:
+      `<div class="empty"><div style="font-size:36px;margin-bottom:10px">📭</div><p>No requests yet</p></div>`}
+    </div>`;
+}
+
+/* ══════════ REQUESTS LIST ══════════ */
+function renderRequests(){
+  const u=cu(),f=S.filterVals;
+  let reqs=getMyRequests().filter(r=>{
+    const q=f.search.toLowerCase();
+    if(q&&!r.id.toLowerCase().includes(q)&&!r.title.toLowerCase().includes(q)&&!r.city.toLowerCase().includes(q)) return false;
+    if(f.status&&r.status!==f.status) return false;
+    if(f.city&&!r.city.toLowerCase().includes(f.city.toLowerCase())) return false;
+    if(f.priority&&r.priority!==f.priority) return false;
+    if(f.type&&r.type!==f.type) return false;
+    return true;
+  });
+  const hasF=Object.values(f).some(Boolean);
+
+  const rows=reqs.map(r=>`
+    <tr class="clickable" onclick="nav('detail','${r.id}')">
+      <td><span class="mono" style="color:var(--grn);background:var(--grnd);padding:2px 7px;border-radius:4px">${r.id}</span></td>
+      <td><div class="req-cell"><div class="req-title">${r.title}</div><div style="font-size:11px;color:var(--txt3)">by ${uname(r.createdById)}</div></div></td>
+      <td style="font-size:12px;color:var(--txt2)">📍 ${r.city}, ${r.state}</td>
+      <td><span class="tag">${r.type}</span></td>
+      <td>${pbadge(r.priority)}</td>
+      <td>${sbadge(r.status)}</td>
+      <td><button class="btn btn-lav-out btn-sm" onclick="event.stopPropagation();nav('detail','${r.id}')">View →</button></td>
+    </tr>`).join('');
+
+  return `
+    <div class="page-header">
+      <div><div class="ph-title">Branding Requests</div><div class="ph-sub">${reqs.length} of ${getMyRequests().length} requests</div></div>
+      ${['marketplace','admin'].includes(u.role)?`<button class="btn btn-p" onclick="nav('new')">➕ New Request</button>`:''}
+    </div>
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-ico">🔍</span>
+        <input class="search-inp" style="width:100%;padding:9px 12px" placeholder="Search by ID, title, city…" value="${f.search}" oninput="S.filterVals.search=this.value;renderContent()"/>
+      </div>
+      <button class="btn btn-s btn-sm ${hasF?'btn-lav-out':''}" onclick="S.filterOpen=!S.filterOpen;renderContent()">⚙️ Filters${hasF?' ('+Object.values(f).filter(Boolean).length+')':''}</button>
+      ${hasF?`<button class="btn btn-err btn-sm" onclick="S.filterVals={search:'',status:'',city:'',priority:'',type:''};renderContent()">✕ Clear</button>`:''}
+    </div>
+    ${S.filterOpen?`
+    <div class="card" style="padding:16px 18px;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px">
+        <div class="fld" style="margin:0"><label>Status</label><select onchange="S.filterVals.status=this.value;renderContent()"><option value="">All</option>${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${f.status===k?'selected':''}>${v.label}</option>`).join('')}</select></div>
+        <div class="fld" style="margin:0"><label>Branding Type</label><select onchange="S.filterVals.type=this.value;renderContent()"><option value="">All</option>${BRANDING_TYPES.map(t=>`<option value="${t}" ${f.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="fld" style="margin:0"><label>City</label><input type="text" placeholder="e.g. Surat" value="${f.city}" oninput="S.filterVals.city=this.value;renderContent()"/></div>
+        <div class="fld" style="margin:0"><label>Priority</label><select onchange="S.filterVals.priority=this.value;renderContent()"><option value="">All</option>${['low','medium','high','urgent'].map(p=>`<option value="${p}" ${f.priority===p?'selected':''}>${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('')}</select></div>
+      </div>
+    </div>`:''}
+    ${rows?`<div class="tbl-wrap"><table><thead><tr><th>#</th><th>Title</th><th>Location</th><th>Type</th><th>Priority</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`:
+    `<div class="empty"><div style="font-size:36px;margin-bottom:10px">🔍</div><p>No requests match your filters</p></div>`}`;
+}
+
+/* ══════════ WORKFLOW TRACKER ══════════ */
+function renderWorkflow(status){
+  const idx=stepIdx(status);
+  return`<div class="wf">${WF_STEPS.map((s,i)=>{
+    const done=idx>i,active=idx===i;
+    return`<div style="display:flex;align-items:center;flex-shrink:0">
+      <div class="wf-step ${done?'done':''} ${active?'active':''}">
+        <div class="wf-circle">${done?'✓':i+1}</div>
+        <div class="wf-lbl">${s.lbl.replace('\n','<br>')}</div>
+        <div class="wf-role">${s.role}</div>
+      </div>${i<WF_STEPS.length-1?`<div class="wf-line ${done?'done':''}"></div>`:''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* ══════════ REQUEST DETAIL ══════════ */
+function renderDetail(){
+  const u=cu(),req=S.requests.find(r=>r.id===S.selReq);
+  if(!req)return`<div class="empty">Request not found</div>`;
+  const can={
+    assignRecce:  ['mis','admin'].includes(u.role)&&req.status==='created',
+    completeRecce:u.role==='recce'&&u.id===req.assignedRecceId&&['assigned_to_recce','recce_in_progress'].includes(req.status),
+    approve:      u.role==='admin'&&req.status==='awaiting_approval',
+    assignVendor: ['mis','admin'].includes(u.role)&&req.status==='approved',
+    startWork:    u.role==='vendor'&&u.id===req.assignedVendorId&&req.status==='assigned_to_vendor',
+    completeWork: u.role==='vendor'&&u.id===req.assignedVendorId&&req.status==='work_in_progress',
+  };
+  const recceTeam=USERS_DB.filter(x=>x.role==='recce'&&x.active);
+  const vendors=USERS_DB.filter(x=>x.role==='vendor'&&x.active);
+  const slaRows=[['Created',req.sla?.created],['To Recce',req.sla?.toRecce],['Recce Done',req.sla?.recceCompleted],['Decision',req.sla?.approvalDecision],['To Vendor',req.sla?.toVendor],['Completed',req.sla?.workCompleted]].filter(([,d])=>d);
+
+  return`
+    <button class="back-btn" onclick="nav('requests')">← Back</button>
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px">
+      <span class="mono" style="color:var(--grn);background:var(--grnd);padding:3px 9px;border-radius:4px;font-weight:700">${req.id}</span>
+      ${sbadge(req.status)} ${pbadge(req.priority)}<span class="tag">${req.type}</span>
+    </div>
+    <div style="font-size:22px;font-weight:800;letter-spacing:-0.02em;color:var(--txt);margin-bottom:5px">${req.title}</div>
+    <div style="display:flex;gap:16px;color:var(--txt2);font-size:12px;margin-bottom:20px;flex-wrap:wrap">
+      <span>👤 ${uname(req.createdById)}</span><span>📍 ${req.city}, ${req.state}</span><span>📅 ${req.created}</span>
+    </div>
+    <div class="card" style="margin-bottom:14px"><div class="sec">⚡ Workflow Progress</div>${renderWorkflow(req.status)}</div>
+    <div class="detail-layout">
+      <div class="detail-main">
+        <div class="card">
+          <div class="sec">📄 Request Details</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Type</label><p>${req.type}</p></div>
+            <div class="d-row"><label>Priority</label><p style="text-transform:capitalize;font-weight:700;color:${PRI[req.priority]?.col}">${req.priority}</p></div>
+            <div class="d-row"><label>Address</label><p>${req.address}, ${req.pincode}</p></div>
+            <div class="d-row"><label>City / State</label><p>${req.city}, ${req.state}</p></div>
+          </div>
+          <label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700">Requirements</label>
+          <p style="font-size:13px;color:var(--txt2);margin-top:5px;line-height:1.6">${req.requirements}</p>
+          ${req.attachments&&req.attachments.length>0?`
+          <div style="margin-top:12px">
+            <label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;display:block;margin-bottom:8px">Attachments (${req.attachments.length})</label>
+            <div class="img-upload-grid">
+              ${req.attachments.map((img,i)=>`<div class="img-thumb-wrap"><img class="img-thumb" src="${img}" alt="Attachment ${i+1}" onclick="openLightbox('${img}')"/></div>`).join('')}
+            </div>
+          </div>`:''}
+        </div>
+
+        ${req.recce?`<div class="card">
+          <div class="sec">🔍 Recce Report</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Estimated Cost</label><p style="color:var(--grn);font-size:16px;font-weight:800">${fc(req.recce.cost)}</p></div>
+            <div class="d-row"><label>Condition</label><p>${req.recce.condition}</p></div>
+            <div class="d-row"><label>Feasibility</label><p style="color:var(--grn);font-weight:600">${req.recce.feasibility}</p></div>
+            <div class="d-row"><label>Date</label><p>${req.recce.completedAt}</p></div>
+          </div>
+          <p style="font-size:13px;color:var(--txt2);margin-bottom:12px;line-height:1.6">${req.recce.notes}</p>
+          ${req.recce.images&&req.recce.images.length>0?`
+          <div>
+            <label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;display:block;margin-bottom:8px">Site Photos (${req.recce.images.length})</label>
+            <div class="img-upload-grid">
+              ${req.recce.images.map((img,i)=>`<div class="img-thumb-wrap"><img class="img-thumb" src="${img}" alt="Site photo ${i+1}" onclick="openLightbox('${img}')"/></div>`).join('')}
+            </div>
+          </div>`:req.recce.completedAt?`<p style="font-size:12px;color:var(--txt3);font-style:italic">No photos attached to this recce report.</p>`:''}
+        </div>`:''}
+
+        ${req.approval?`<div class="card" style="border-color:rgba(45,90,61,.3);background:linear-gradient(135deg,#fff,var(--grnd))">
+          <div class="sec" style="color:var(--grn)">✅ Approved</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Budget</label><p style="color:var(--grn);font-size:16px;font-weight:800">${fc(req.approval.budget)}</p></div>
+            <div class="d-row"><label>By / Date</label><p>${uname(req.approval.byId)} · ${req.approval.date}</p></div>
+          </div>
+          <p style="font-size:13px;color:var(--txt2)">${req.approval.comment}</p>
+        </div>`:''}
+
+        ${req.vendorWork?`<div class="card" style="border-color:rgba(45,90,61,.3);background:linear-gradient(135deg,#fff,var(--grnd))">
+          <div class="sec" style="color:var(--grn)">🎉 Work Completed</div>
+          <div class="d-grid">
+            <div class="d-row"><label>Actual Cost</label><p style="color:var(--grn);font-size:16px;font-weight:800">${fc(req.vendorWork.actualCost)}</p></div>
+            <div class="d-row"><label>Completed</label><p>${req.vendorWork.completedAt}</p></div>
+          </div>
+          <p style="font-size:13px;color:var(--txt2);margin-bottom:12px">${req.vendorWork.notes}</p>
+          ${req.vendorWork.images&&Array.isArray(req.vendorWork.images)&&req.vendorWork.images.length>0?`
+          <div>
+            <label style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;display:block;margin-bottom:8px">Completion Photos (${req.vendorWork.images.length})</label>
+            <div class="img-upload-grid">
+              ${req.vendorWork.images.map((img,i)=>`<div class="img-thumb-wrap"><img class="img-thumb" src="${img}" alt="Work photo ${i+1}" onclick="openLightbox('${img}')"/></div>`).join('')}
+            </div>
+          </div>`:
+          `<p style="font-size:12px;color:var(--txt3);font-style:italic">No completion photos uploaded yet.</p>`}
+        </div>`:''}
+
+        ${can.assignRecce?`<div class="action-panel">
+          <div class="action-title">📤 Assign to Recce Team</div>
+          <div class="fld"><label>Select Member *</label><select id="sel-recce"><option value="">-- Choose --</option>${recceTeam.map(u=>`<option value="${u.id}">${u.name} · ${u.phone}</option>`).join('')}</select></div>
+          <div class="fld"><label>MIS Notes (optional)</label><textarea id="mis-notes" rows="2" placeholder="Instructions for the recce team…"></textarea></div>
+          <button class="btn btn-p" onclick="doAssignRecce('${req.id}')">📤 Assign Now</button>
+        </div>`:''}
+
+        ${can.completeRecce?`<div class="action-panel">
+          <div class="action-title">🔍 Submit Recce Report</div>
+          <div class="grid-2">
+            <div class="fld"><label>Site Condition</label><select id="site-cond"><option>Excellent</option><option selected>Good</option><option>Fair</option><option>Poor</option></select></div>
+            <div class="fld"><label>Feasibility</label><select id="feasibility"><option selected>Feasible</option><option>Feasible with Changes</option><option>Not Feasible</option></select></div>
+          </div>
+          <div class="fld"><label>Estimated Cost (₹) *</label><input id="est-cost" type="number" placeholder="e.g. 85000"/></div>
+          <div class="fld"><label>Site Observations *</label><textarea id="site-notes" rows="3" placeholder="Site condition, access, power, visibility, measurements…"></textarea></div>
+          <div class="fld">
+            <label>Site Photos</label>
+            <div class="img-upload-grid" id="recce-preview"></div>
+            <div class="img-add-btn" onclick="document.getElementById('recce-file-input').click()" style="display:inline-flex;width:auto;padding:0 16px;height:38px;border-radius:var(--r);gap:6px;margin-top:6px">
+              <span>📸</span><span>Choose Photos</span>
+            </div>
+            <input id="recce-file-input" type="file" accept="image/*" multiple style="display:none" onchange="previewImages(this,'recce-preview','recce-imgs')"/>
+            <div id="recce-imgs-data" style="display:none"></div>
+            <p style="font-size:11px;color:var(--txt3);margin-top:6px">JPEG, PNG, WebP · Each file max 5MB · Select multiple at once</p>
+          </div>
+          <button class="btn btn-p" onclick="doCompleteRecce('${req.id}')">✅ Submit Report</button>
+        </div>`:''}
+
+        ${can.approve?`<div class="action-panel">
+          <div class="action-title">⚖️ Approve or Reject</div>
+          <div class="dec-btns">
+            <button class="dec-btn ${S.decisionChoice==='approved'?'approve-sel':''}" onclick="setDecision('approved')">✅ Approve</button>
+            <button class="dec-btn ${S.decisionChoice==='rejected'?'reject-sel':''}" onclick="setDecision('rejected')">❌ Reject</button>
+          </div>
+          <div class="fld"><label>Approved Budget (₹)</label><input id="final-budget" type="number" placeholder="${req.recce?.cost||'Enter budget'}"/></div>
+          <div class="fld"><label>Comment / Reason</label><textarea id="approval-comment" rows="3" placeholder="Add feedback, reason, or conditions…"></textarea></div>
+          <button class="btn ${S.decisionChoice==='rejected'?'btn-err':'btn-p'}" onclick="doApprove('${req.id}')">
+            ${S.decisionChoice?`Submit ${S.decisionChoice.toUpperCase()}`:'Select Approve / Reject first'}
+          </button>
+        </div>`:''}
+
+        ${can.assignVendor?`<div class="action-panel">
+          <div class="action-title">🏭 Assign to Vendor</div>
+          <div class="fld"><label>Select Vendor *</label><select id="sel-vendor"><option value="">-- Choose --</option>${vendors.map(v=>`<option value="${v.id}">${v.vendorInfo?.company||v.name} — ⭐${v.vendorInfo?.rating||'N/A'} · ${v.vendorInfo?.jobs||0} jobs</option>`).join('')}</select></div>
+          <button class="btn btn-p" onclick="doAssignVendor('${req.id}')">📤 Assign Work Order</button>
+        </div>`:''}
+
+        ${can.startWork?`<div class="card" style="background:var(--grnd);border-color:rgba(45,90,61,.25)">
+          <p style="color:var(--txt2);font-size:13px;margin-bottom:12px">Approved budget: <strong style="color:var(--grn)">${fc(req.approval?.budget)}</strong></p>
+          <button class="btn btn-ok" onclick="doStartWork('${req.id}')">🔨 Start Work</button>
+        </div>`:''}
+
+        ${can.completeWork?`<div class="action-panel">
+          <div class="action-title">🎉 Mark Work Completed</div>
+          <div class="fld"><label>Actual Cost (₹)</label><input id="actual-cost" type="number" placeholder="${req.approval?.budget||'0'}"/></div>
+          <div class="fld"><label>Completion Notes</label><textarea id="vendor-notes" rows="3" placeholder="Work done, materials used, quality notes…"></textarea></div>
+          <div class="fld">
+            <label>Final Branding Photos * <span style="color:var(--red);font-weight:400">(required — min 1 photo)</span></label>
+            <div class="img-upload-grid" id="vendor-preview"></div>
+            <div class="img-add-btn" onclick="document.getElementById('vendor-file-input').click()" style="display:inline-flex;width:auto;padding:0 16px;height:38px;border-radius:var(--r);gap:6px;margin-top:4px">
+              <span>📷</span><span>Choose Photos</span>
+            </div>
+            <input id="vendor-file-input" type="file" accept="image/*" multiple style="display:none" onchange="previewImages(this,'vendor-preview','vendor-imgs')"/>
+            <div id="vendor-imgs-data" style="display:none"></div>
+            <p style="font-size:11px;color:var(--txt3);margin-top:6px">Upload final photos of completed branding work</p>
+          </div>
+          <button class="btn btn-ok" onclick="doCompleteWork('${req.id}')">🎉 Mark Complete</button>
+        </div>`:''}
+      </div>
+
+      <div class="detail-side">
+        <div class="card">
+          <div class="sec">👥 Assignments</div>
+          ${assignRowH('Requester',req.createdById,'#3a7bd5')}
+          ${req.assignedMISId?assignRowH('MIS Team',req.assignedMISId,'#7c6bc9'):''}
+          ${req.assignedRecceId?assignRowH('Recce Team',req.assignedRecceId,'#0d9488'):''}
+          ${req.assignedVendorId?assignRowH('Vendor',req.assignedVendorId,'#2d7a4a'):''}
+        </div>
+        ${slaRows.length?`<div class="card"><div class="sec">⏱ SLA</div>${slaRows.map(([l,d])=>`<div class="sla-row"><span class="sla-label">${l}</span><span class="sla-date">${d}</span></div>`).join('')}</div>`:''}
+        <div class="card">
+          <div class="sec">📜 Activity</div>
+          <div class="timeline">${[...req.activities].reverse().map(a=>`
+            <div class="tl"><div class="tl-dot"></div>
+            <div class="tl-body"><div class="tl-act">${a.action}</div>
+            <div class="tl-meta"><span style="color:var(--grn);font-weight:700">${uname(a.byId)}</span> · ${a.time}</div></div></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function assignRowH(label,uid,col){
+  const u=findUser(uid);if(!u)return'';
+  return`<div class="assign-row"><div class="assign-ava" style="background:${col}18;color:${col};border:2px solid ${col}33">${u.name[0]}</div>
+    <div><div style="font-size:13px;font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--txt3)">${label}</div></div></div>`;
+}
+function setDecision(d){S.decisionChoice=d;renderContent();}
+
+/* ══════════ WORKFLOW ACTIONS ══════════ */
+function doAssignRecce(id){
+  const v=document.getElementById('sel-recce')?.value;
+  if(!v){showToast('Select a recce member first','error');return;}
+  const r=S.requests.find(x=>x.id===id),u=cu(),ru=findUser(v);
+  r.status='assigned_to_recce';r.assignedRecceId=v;r.assignedMISId=u.id;
+  r.sla={...r.sla,toRecce:today()};
+  r.activities.push({action:`Assigned to Recce: ${ru?.name}`,byId:u.id,time:'Just now'});
+  addNotif([v,r.createdById],{title:`Assigned: ${id}`,msg:`You have been assigned for site recce on "${r.title}"`,type:'assigned',reqId:id});
+  showToast(`Assigned to ${ru?.name}!`);renderSidebar();nav('detail',id);
+}
+function doCompleteRecce(id){
+  const cost=document.getElementById('est-cost')?.value;
+  const notes=document.getElementById('site-notes')?.value||'';
+  if(!cost){showToast('Estimated cost is required','error');return;}
+  if(!notes.trim()){showToast('Site observations are required','error');return;}
+  const r=S.requests.find(x=>x.id===id),u=cu();
+  const imgs=getStoredImgs('recce-imgs');
+  r.status='awaiting_approval';
+  r.recce={
+    notes,cost:parseInt(cost),
+    condition:document.getElementById('site-cond')?.value||'Good',
+    feasibility:document.getElementById('feasibility')?.value||'Feasible',
+    completedAt:today(),
+    images:imgs
+  };
+  r.sla={...r.sla,recceCompleted:today()};
+  r.activities.push({action:`Recce completed — ${imgs.length} photo(s) attached — submitted for approval`,byId:u.id,time:'Just now'});
+  clearStore('recce-imgs');
+  addNotif(USERS_DB.filter(x=>x.role==='admin').map(x=>x.id).concat([r.createdById]),{
+    title:`Recce Done: ${id}`,
+    msg:`Est. cost ${fc(parseInt(cost))}. ${imgs.length} photo(s) attached. Awaiting approval.`,
+    type:'recce_completed',reqId:id
+  });
+  showToast(`Recce submitted${imgs.length?` with ${imgs.length} photo(s)`:''}!`);
+  renderSidebar();nav('detail',id);
+}
+function doApprove(id){
+  if(!S.decisionChoice){showToast('Click Approve or Reject first','error');return;}
+  const r=S.requests.find(x=>x.id===id),u=cu();
+  const budget=document.getElementById('final-budget')?.value;
+  const comment=document.getElementById('approval-comment')?.value||'';
+  r.status=S.decisionChoice;r.sla={...r.sla,approvalDecision:today()};
+  if(S.decisionChoice==='approved'){
+    r.approval={byId:u.id,budget:parseInt(budget)||r.recce?.cost,comment:comment||'Approved.',date:today()};
+    r.activities.push({action:'Request approved by Admin',byId:u.id,time:'Just now'});
+    addNotif(USERS_DB.filter(x=>x.role==='mis').map(x=>x.id).concat([r.createdById]),{title:`Approved: ${id}`,msg:`Budget: ${fc(r.approval.budget)}.`,type:'approved',reqId:id});
+    showToast('Request APPROVED ✅');
+  }else{
+    r.activities.push({action:`Rejected — ${comment||'No reason'}`,byId:u.id,time:'Just now'});
+    addNotif([r.createdById,r.assignedMISId,r.assignedRecceId].filter(Boolean),{title:`Rejected: ${id}`,msg:`Reason: ${comment||'Not specified'}`,type:'rejected',reqId:id});
+    showToast('Request rejected','error');
+  }
+  S.decisionChoice='';renderSidebar();nav('detail',id);
+}
+function doAssignVendor(id){
+  const v=document.getElementById('sel-vendor')?.value;
+  if(!v){showToast('Select a vendor first','error');return;}
+  const r=S.requests.find(x=>x.id===id),u=cu(),vu=findUser(v);
+  r.status='assigned_to_vendor';r.assignedVendorId=v;
+  r.sla={...r.sla,toVendor:today()};
+  r.activities.push({action:`Assigned to Vendor: ${vu?.vendorInfo?.company||vu?.name}`,byId:u.id,time:'Just now'});
+  addNotif([v,r.createdById],{title:`Work Order: ${id}`,msg:`"${r.title}" assigned to you.`,type:'assigned_to_vendor',reqId:id});
+  showToast(`Assigned to ${vu?.vendorInfo?.company||vu?.name}!`);renderSidebar();nav('detail',id);
+}
+function doStartWork(id){
+  const r=S.requests.find(x=>x.id===id),u=cu();
+  r.status='work_in_progress';
+  r.activities.push({action:'Vendor started work',byId:u.id,time:'Just now'});
+  showToast('Work started! 🔨');nav('detail',id);
+}
+function doCompleteWork(id){
+  const cost=document.getElementById('actual-cost')?.value;
+  const notes=document.getElementById('vendor-notes')?.value||'Work completed as per specifications.';
+  const r=S.requests.find(x=>x.id===id),u=cu();
+  const imgs=getStoredImgs('vendor-imgs');
+  if(!imgs.length){showToast('Please upload at least one completion photo','error');return;}
+  r.status='work_completed';
+  r.vendorWork={
+    notes,
+    actualCost:parseInt(cost)||r.approval?.budget,
+    completedAt:today(),
+    images:imgs
+  };
+  r.sla={...r.sla,workCompleted:today()};
+  r.activities.push({action:`Work completed — ${imgs.length} photo(s) uploaded`,byId:u.id,time:'Just now'});
+  clearStore('vendor-imgs');
+  addNotif([r.createdById,r.assignedMISId].filter(Boolean),{
+    title:`Work Done: ${id}`,
+    msg:`Vendor completed "${r.title}". ${imgs.length} completion photo(s) uploaded.`,
+    type:'work_completed',reqId:id
+  });
+  if(u.vendorInfo)u.vendorInfo.jobs=(u.vendorInfo.jobs||0)+1;
+  showToast(`Work completed with ${imgs.length} photo(s)! 🎉`);
+  renderSidebar();nav('detail',id);
+}
+
+/* ══════════ NEW REQUEST ══════════ */
+function renderNewRequest(){
+  return`
+    <button class="back-btn" onclick="nav('requests')">← Back</button>
+    <div class="ph-title" style="margin-bottom:4px">New Branding Request</div>
+    <div class="ph-sub" style="margin-bottom:20px">Fill in details to kick off the branding workflow</div>
+    <div style="display:grid;grid-template-columns:1fr 310px;gap:16px;align-items:start">
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="sec">📌 Basic Information</div>
+          <div class="fld"><label>Request Title *</label><input id="nr-title" type="text" placeholder="e.g. Hoarding at Ring Road Junction, Surat"/></div>
+          <div class="grid-2">
+            <div class="fld"><label>Branding Type *</label><select id="nr-type"><option value="">Select…</option>${BRANDING_TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+            <div class="fld"><label>Priority</label><select id="nr-pri"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="urgent">🚨 Urgent</option></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="fld"><label>Target Date</label><input id="nr-date" type="date"/></div>
+            <div class="fld"><label>Budget Estimate (₹)</label><input id="nr-budget" type="number" placeholder="Approx. budget"/></div>
+          </div>
+          <div class="fld"><label>Requirements *</label><textarea id="nr-req" rows="4" placeholder="Dimensions, materials, brand guidelines, special requirements, timeline…"></textarea></div>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="sec">📍 Location</div>
+          <div class="fld"><label>Full Address *</label><textarea id="nr-addr" rows="2" placeholder="Street, building, area, landmark…"></textarea></div>
+          <div class="grid-2">
+            <div class="fld"><label>City *</label><input id="nr-city" type="text" placeholder="e.g. Surat"/></div>
+            <div class="fld"><label>State *</label><select id="nr-state">${STATES.map(s=>`<option>${s}</option>`).join('')}</select></div>
+          </div>
+          <div class="grid-2">
+            <div class="fld"><label>Pincode</label><input id="nr-pin" type="text" placeholder="395006" maxlength="6"/></div>
+            <div class="fld"><label>Landmark</label><input id="nr-land" type="text" placeholder="Near ABC Mall"/></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="sec">📎 Attachments</div>
+          <div class="img-upload-grid" id="attach-preview"></div>
+          <div class="img-add-btn" onclick="document.getElementById('attach-file-input').click()" style="display:inline-flex;width:auto;padding:0 16px;height:38px;border-radius:var(--r);gap:6px;margin-top:4px">
+            <span>📎</span><span>Attach Files</span>
+          </div>
+          <input id="attach-file-input" type="file" accept="image/*,.pdf" multiple style="display:none" onchange="previewImages(this,'attach-preview','attach-imgs')"/>
+          <div id="attach-imgs-data" style="display:none"></div>
+          <p style="font-size:11px;color:var(--txt3);margin-top:6px">PNG, JPG, PDF — optional reference files</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px">
+          <button class="btn btn-s" onclick="nav('requests')">Cancel</button>
+          <button class="btn btn-p" onclick="doCreateRequest()">📤 Submit Request</button>
+        </div>
+      </div>
+      <div class="card" style="position:sticky;top:0">
+        <div class="sec">ℹ️ What Happens Next</div>
+        ${[['📤','1. Submit','MIS Team is notified instantly'],['👀','2. MIS Review','Assigns a Recce Team member'],['🔍','3. Site Visit','Recce uploads photos + estimate'],['⚖️','4. Admin Review','Approves or rejects with budget'],['🏭','5. Vendor Work','MIS assigns vendor for execution'],['🎉','6. Done!','Vendor uploads final photos']].map(([ico,t,s])=>`
+          <div style="display:flex;gap:10px;margin-bottom:12px">
+            <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--grnd),var(--lavd));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">${ico}</div>
+            <div><div style="font-size:12px;font-weight:700;color:var(--txt)">${t}</div><div style="font-size:11px;color:var(--txt3)">${s}</div></div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+function doCreateRequest(){
+  const title=document.getElementById('nr-title')?.value?.trim();
+  const type=document.getElementById('nr-type')?.value;
+  const city=document.getElementById('nr-city')?.value?.trim();
+  const addr=document.getElementById('nr-addr')?.value?.trim();
+  const req2=document.getElementById('nr-req')?.value?.trim();
+  if(!title||!type||!city||!addr||!req2){showToast('Fill all required (*) fields','error');return;}
+  const u=cu();
+  const id=`BR-2024-00${String(S.newReqCtr++).padStart(2,'0')}`;
+  const attachments=getStoredImgs('attach-imgs');
+  clearStore('attach-imgs');
+  S.requests.unshift({
+    id,title,type,status:'created',
+    priority:document.getElementById('nr-pri')?.value||'medium',
+    city,state:document.getElementById('nr-state')?.value||'Gujarat',
+    address:addr,pincode:document.getElementById('nr-pin')?.value||'',
+    requirements:req2,createdById:u.id,
+    assignedMISId:null,assignedRecceId:null,assignedVendorId:null,
+    recce:null,approval:null,vendorWork:null,created:today(),
+    attachments,
+    activities:[{action:`Request created${attachments.length?` with ${attachments.length} attachment(s)`:''}`,byId:u.id,time:'Just now'}],
+    sla:{created:today()}
+  });
+  addNotif(USERS_DB.filter(x=>x.role==='mis'&&x.active).map(x=>x.id),{title:`New Request: ${title}`,msg:`${u.name} submitted a new ${type} request in ${city}.`,type:'request_created',reqId:id});
+  showToast(`Request ${id} submitted! 🎉`);renderSidebar();nav('detail',id);
+}
+
+/* ══════════ NOTIFICATIONS ══════════ */
+function renderNotifications(){
+  const notifs=getMyNotifs();
+  const typeCol={request_created:'#3a7bd5',assigned:'#0d9488',recce_completed:'#7c6bc9',approved:'#2d7a4a',rejected:'#d63031',assigned_to_vendor:'#0d9488',work_completed:'#2d7a4a'};
+  const unread=notifs.filter(n=>!n.read).length;
+  return`
+    <div class="page-header">
+      <div><div class="ph-title">Notifications</div>${unread?`<div class="ph-sub" style="color:var(--lav)">${unread} unread</div>`:''}</div>
+      ${unread?`<button class="btn btn-lav-out btn-sm" onclick="markAllRead()">✓ Mark all read</button>`:''}
+    </div>
+    ${notifs.length?notifs.map((n,i)=>`
+      <div class="notif-item ${n.read?'':'unread'}" onclick="readNotif(${i})">
+        <div class="ndot" style="background:${n.read?'var(--border2)':typeCol[n.type]||'var(--lav)'}"></div>
+        <div style="flex:1"><div class="n-title">${n.title}</div><div class="n-msg">${n.msg}</div>
+          <div class="n-time">${n.time} ${n.reqId?`· <span style="color:var(--grn);cursor:pointer;font-weight:700" onclick="event.stopPropagation();nav('detail','${n.reqId}')">${n.reqId} →</span>`:''}</div>
+        </div>${!n.read?`<div class="unread-pip"></div>`:''}
+      </div>`).join(''):
+    `<div class="empty"><div style="font-size:36px;margin-bottom:10px">🔔</div><p>No notifications yet</p></div>`}`;
+}
+function markAllRead(){getMyNotifs().forEach(n=>n.read=true);renderSidebar();renderContent();showToast('All marked as read');}
+function readNotif(i){getMyNotifs()[i].read=true;renderSidebar();renderContent();}
+
+/* ══════════ REPORTS ══════════ */
+function renderReports(){
+  const all=S.requests;
+  const completed=all.filter(r=>r.status==='work_completed');
+  const totalBudget=completed.reduce((a,r)=>a+(r.approval?.budget||0),0);
+  const totalActual=completed.reduce((a,r)=>a+(r.vendorWork?.actualCost||0),0);
+  const saving=totalBudget-totalActual;
+
+  // By city
+  const byCity={};all.forEach(r=>{byCity[r.city]=(byCity[r.city]||0)+1;});
+  const topCities=Object.entries(byCity).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  // By type
+  const byType={};all.forEach(r=>{byType[r.type]=(byType[r.type]||0)+1;});
+
+  // By status
+  const byStatus={};all.forEach(r=>{byStatus[r.status]=(byStatus[r.status]||0)+1;});
+
+  // Vendor performance
+  const vendorPerf={};all.filter(r=>r.assignedVendorId).forEach(r=>{
+    const vid=r.assignedVendorId;
+    if(!vendorPerf[vid])vendorPerf[vid]={name:findUser(vid)?.vendorInfo?.company||uname(vid),assigned:0,completed:0,totalCost:0};
+    vendorPerf[vid].assigned++;
+    if(r.status==='work_completed'){vendorPerf[vid].completed++;vendorPerf[vid].totalCost+=(r.vendorWork?.actualCost||0);}
+  });
+
+  return`
+    <div class="ph-title" style="margin-bottom:4px">Reports & Analytics</div>
+    <div class="ph-sub" style="margin-bottom:20px">Overview of all branding operations — ${all.length} total requests</div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Total Requests</div><div class="kpi-val">${all.length}</div></div><div class="kpi-ico" style="background:var(--blud);color:var(--blu)">📋</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Completed</div><div class="kpi-val" style="color:var(--grn)">${completed.length}</div></div><div class="kpi-ico" style="background:var(--grnd);color:var(--grn)">✅</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">Total Budget</div><div class="kpi-val" style="font-size:20px;color:var(--lav)">${fc(totalBudget)}</div></div><div class="kpi-ico" style="background:var(--lavd);color:var(--lav)">💰</div></div></div>
+      <div class="kpi"><div class="kpi-top"><div><div class="kpi-label">${saving>=0?'Savings':'Overrun'}</div><div class="kpi-val" style="font-size:20px;color:${saving>=0?'var(--grn)':'var(--red)'}">${fc(Math.abs(saving))}</div></div><div class="kpi-ico" style="background:${saving>=0?'var(--grnd)':'var(--redd)'};color:${saving>=0?'var(--grn)':'var(--red)'}">${saving>=0?'📉':'📈'}</div></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="card">
+        <div class="sec">📍 Requests by City</div>
+        ${topCities.map(([city,cnt],i)=>`
+          <div class="summary-row">
+            <span style="font-size:12px;font-weight:700;color:var(--txt3);min-width:20px">#${i+1}</span>
+            <span style="flex:1;font-weight:600">${city}</span>
+            <span class="badge" style="background:var(--lavd);color:var(--lav)">${cnt} req</span>
+            <div style="width:80px;height:6px;background:var(--bgs);border-radius:3px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,var(--grn),var(--lav));width:${Math.round(cnt/all.length*100)}%;border-radius:3px"></div></div>
+          </div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="sec">🏷 Requests by Type</div>
+        ${Object.entries(byType).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([type,cnt])=>`
+          <div class="summary-row">
+            <span style="flex:1;font-weight:600;font-size:13px">${type}</span>
+            <span class="badge" style="background:var(--grnd);color:var(--grn)">${cnt}</span>
+            <div style="width:80px;height:6px;background:var(--bgs);border-radius:3px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,var(--grn),var(--mint));width:${Math.round(cnt/all.length*100)}%;border-radius:3px"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="sec">📊 Status Distribution</div>
+        ${Object.entries(byStatus).map(([s,n])=>{const c=STATUS[s];return`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <span style="font-size:14px">${c?.ico||'•'}</span>
+            <span style="flex:1;font-size:12px;font-weight:600;color:${c?.col||'#888'}">${c?.label||s}</span>
+            <span style="font-size:13px;font-weight:700;min-width:24px;text-align:right">${n}</span>
+            <div style="width:60px;height:5px;background:var(--bgs);border-radius:3px;overflow:hidden"><div style="height:100%;background:${c?.col||'#888'};opacity:.6;width:${Math.round(n/all.length*100)}%;border-radius:3px"></div></div>
+          </div>`;}).join('')}
+      </div>
+      <div class="card">
+        <div class="sec">🏭 Vendor Performance</div>
+        ${Object.values(vendorPerf).map(v=>`
+          <div class="summary-row">
+            <div style="flex:1"><div style="font-weight:700;font-size:13px">${v.name}</div><div style="font-size:11px;color:var(--txt3)">${v.completed}/${v.assigned} completed · ${fc(v.totalCost)}</div></div>
+            <span class="badge" style="background:${v.completed===v.assigned&&v.assigned>0?'var(--grnd)':'var(--orgd)'};color:${v.completed===v.assigned&&v.assigned>0?'var(--grn)':'var(--org)'}">
+              ${v.assigned>0?Math.round(v.completed/v.assigned*100):0}%
+            </span>
+          </div>`).join('')||`<p style="color:var(--txt3);font-size:13px">No vendor data yet</p>`}
+      </div>
+    </div>`;
+}
+
+/* ══════════ TEAM ══════════ */
+function renderTeam(){
+  const roleOrder=['admin','mis','marketplace','recce','vendor'];
+  return`
+    <div class="ph-title" style="margin-bottom:4px">Team Members</div>
+    <div class="ph-sub" style="margin-bottom:20px">${USERS_DB.filter(u=>u.active).length} active employees across all roles</div>
+    ${roleOrder.map(role=>{
+      const team=USERS_DB.filter(u=>u.role===role&&u.active);if(!team.length)return'';
+      const r=rc(role);
+      return`<div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span>${r.ico}</span><span style="font-size:15px;font-weight:800;color:var(--txt)">${r.lbl}</span>
+          <span class="badge" style="background:${r.bg};color:${r.col}">${team.length}</span>
+        </div>
+        <div class="team-grid">${team.map(u=>`
+          <div class="team-card">
+            <div class="team-ava" style="background:${r.bg};color:${r.col};border-color:${r.col}44">${u.name[0]}</div>
+            <div style="font-size:15px;font-weight:800;margin-bottom:3px">${u.name}</div>
+            <div style="font-size:12px;color:var(--txt3)">${u.email}</div>
+            <div style="font-size:12px;color:var(--txt2);margin-top:2px">📞 ${u.phone}</div>
+            ${u.vendorInfo?`<div style="font-size:11px;color:var(--txt2);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">${u.vendorInfo.company}<br>⭐ ${u.vendorInfo.rating} · ${u.vendorInfo.jobs} jobs · ${u.vendorInfo.area}</div>`:''}
+            <div style="font-size:10px;color:var(--txt3);margin-top:8px">Joined ${u.joined}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}`;
+}
+
+/* ══════════ USER MANAGEMENT ══════════ */
+function renderUserManagement(){
+  const all=USERS_DB;
+  const roles=['admin','marketplace','mis','recce','vendor'];
+  const byRole={};roles.forEach(r=>{byRole[r]=all.filter(u=>u.role===r&&u.active).length;});
+
+  const rows=all.map(u=>{
+    const r=rc(u.role);
+    return`<tr>
+      <td><div style="display:flex;align-items:center;gap:9px">
+        <div style="width:32px;height:32px;border-radius:50%;background:${r.bg};color:${r.col};border:2px solid ${r.col}33;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0">${u.name[0]}</div>
+        <div><div style="font-size:13px;font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--txt3)">${u.email}</div></div>
+      </div></td>
+      <td><span class="badge" style="background:${r.bg};color:${r.col};border:1px solid ${r.col}33">${r.ico} ${r.lbl}</span></td>
+      <td style="font-size:12px;color:var(--txt2)">${u.phone}</td>
+      <td><span class="badge" style="background:${u.active?'var(--grnd)':'var(--redd)'};color:${u.active?'var(--grn)':'var(--red)'};border:1px solid ${u.active?'rgba(45,90,61,.3)':'rgba(214,48,49,.3)'}">${u.active?'✓ Active':'✕ Inactive'}</span></td>
+      <td style="font-size:12px;color:var(--txt3)">${u.joined}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-lav-out btn-xs" onclick="openEditUser('${u.id}')">✏️ Edit</button>
+          <button class="btn ${u.active?'btn-err':'btn-ok'} btn-xs" onclick="toggleUserActive('${u.id}')">${u.active?'Deactivate':'Activate'}</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return`
+    <div class="page-header">
+      <div><div class="ph-title">⚙️ User Management</div><div class="ph-sub">Manage all employee accounts — ${all.filter(u=>u.active).length} active of ${all.length} total</div></div>
+      <button class="btn btn-p" onclick="openAddUser()">➕ Add New User</button>
+    </div>
+    <div class="kpi-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px">
+      ${roles.map(r=>{const cfg=rc(r);return`<div class="kpi"><div class="kpi-top"><div><div class="kpi-label">${cfg.ico} ${cfg.lbl}</div><div class="kpi-val" style="color:${cfg.col};font-size:24px">${byRole[r]||0}</div></div></div><div style="font-size:11px;color:var(--txt3);margin-top:4px">${all.filter(u=>u.role===r&&!u.active).length>0?`<span style="color:var(--red)">${all.filter(u=>u.role===r&&!u.active).length} inactive</span>`:''}</div></div>`;}).join('')}
+    </div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Employee</th><th>Role</th><th>Phone</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+        <tbody>${rows}</tbody></table>
+      </div>
+    </div>`;
+}
+
+function toggleUserActive(uid){
+  const u=USERS_DB.find(x=>x.id===uid);if(!u)return;
+  if(u.id===cu().id){showToast("Can't deactivate your own account",'error');return;}
+  u.active=!u.active;
+  showToast(`${u.name} ${u.active?'activated':'deactivated'}`,u.active?'success':'info');
+  renderContent();
+}
+
+function openAddUser(){
+  document.getElementById('modal-root').innerHTML=`
+    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-title">➕ Add New Employee</div>
+        <div class="modal-sub">Create account. They can log in immediately with the set password.</div>
+        <div class="grid-2">
+          <div class="fld"><label>Full Name *</label><input id="m-name" type="text" placeholder="Ravi Kumar"/></div>
+          <div class="fld"><label>Phone</label><input id="m-phone" type="text" placeholder="9800000000" maxlength="10"/></div>
+        </div>
+        <div class="fld"><label>Email (Login ID) *</label><input id="m-email" type="email" placeholder="ravi@brandflow.com"/></div>
+        <div class="grid-2">
+          <div class="fld"><label>Initial Password *</label><input id="m-pass" type="text" value="password123" placeholder="Min 6 chars"/></div>
+          <div class="fld"><label>Role *</label>
+            <select id="m-role" onchange="toggleVendorFields()">
+              <option value="">Select role…</option>
+              <option value="marketplace">🛒 Marketplace</option>
+              <option value="mis">📊 MIS Team</option>
+              <option value="recce">🔍 Recce Team</option>
+              <option value="vendor">🏭 Vendor</option>
+              <option value="admin">🔑 Admin</option>
+            </select>
+          </div>
+        </div>
+        <div id="vendor-fields" style="display:none">
+          <div class="divider"></div>
+          <div style="font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Vendor Details</div>
+          <div class="fld"><label>Company Name</label><input id="m-company" type="text" placeholder="e.g. SignCraft Pvt Ltd"/></div>
+          <div class="grid-2">
+            <div class="fld"><label>Service Area</label><input id="m-area" type="text" placeholder="Surat, Ahmedabad"/></div>
+            <div class="fld"><label>Initial Rating</label><input id="m-rating" type="number" step="0.1" min="0" max="5" placeholder="4.0"/></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-p" onclick="doAddUser()">➕ Create Account</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleVendorFields(){
+  const role=document.getElementById('m-role')?.value;
+  const vf=document.getElementById('vendor-fields');
+  if(vf)vf.style.display=role==='vendor'?'block':'none';
+}
+
+function doAddUser(){
+  const name=document.getElementById('m-name')?.value?.trim();
+  const email=document.getElementById('m-email')?.value?.trim().toLowerCase();
+  const pass=document.getElementById('m-pass')?.value?.trim();
+  const role=document.getElementById('m-role')?.value;
+  const phone=document.getElementById('m-phone')?.value?.trim()||'N/A';
+  if(!name||!email||!pass||!role){showToast('Fill all required fields','error');return;}
+  if(USERS_DB.find(u=>u.email===email)){showToast('Email already registered','error');return;}
+  if(pass.length<6){showToast('Password must be at least 6 chars','error');return;}
+  const newUser={id:'u'+Date.now(),name,email,password:pass,role,phone,active:true,joined:new Date().toLocaleDateString('en-IN',{month:'short',year:'numeric'})};
+  if(role==='vendor'){
+    newUser.vendorInfo={company:document.getElementById('m-company')?.value?.trim()||name,area:document.getElementById('m-area')?.value?.trim()||'N/A',rating:parseFloat(document.getElementById('m-rating')?.value)||4.0,jobs:0};
+  }
+  USERS_DB.push(newUser);
+  closeModal();
+  showToast(`${name} added as ${rc(role).lbl}! They can log in now.`);
+  renderContent();
+}
+
+function openEditUser(uid){
+  const u=USERS_DB.find(x=>x.id===uid);if(!u)return;
+  const r=rc(u.role);
+  document.getElementById('modal-root').innerHTML=`
+    <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-title">✏️ Edit User</div>
+        <div class="modal-sub" style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;border-radius:50%;background:${r.bg};color:${r.col};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">${u.name[0]}</div>
+          <span>${u.name} · <span style="color:${r.col}">${r.lbl}</span></span>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="fld"><label>Full Name</label><input id="e-name" type="text" value="${u.name}"/></div>
+          <div class="fld"><label>Phone</label><input id="e-phone" type="text" value="${u.phone}"/></div>
+        </div>
+        <div class="fld"><label>Email (Login)</label><input id="e-email" type="email" value="${u.email}"/></div>
+        <div class="grid-2">
+          <div class="fld"><label>New Password <span style="color:var(--txt3);font-weight:400">(blank = keep)</span></label><input id="e-pass" type="text" placeholder="Leave blank to keep"/></div>
+          <div class="fld"><label>Role</label>
+            <select id="e-role" ${u.id===cu().id?'disabled':''}>
+              ${['admin','marketplace','mis','recce','vendor'].map(r2=>`<option value="${r2}" ${u.role===r2?'selected':''}>${rc(r2).ico} ${rc(r2).lbl}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        ${u.vendorInfo?`
+        <div class="divider"></div>
+        <div style="font-size:11px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Vendor Details</div>
+        <div class="grid-2">
+          <div class="fld"><label>Company</label><input id="e-company" type="text" value="${u.vendorInfo.company}"/></div>
+          <div class="fld"><label>Service Area</label><input id="e-area" type="text" value="${u.vendorInfo.area||''}"/></div>
+        </div>
+        <div class="fld"><label>Rating</label><input id="e-rating" type="number" step="0.1" min="0" max="5" value="${u.vendorInfo.rating}" style="width:120px"/></div>`:''}
+        <div class="modal-footer">
+          <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-err btn-sm" onclick="resetPwd('${uid}')">🔑 Reset Password</button>
+          <button class="btn btn-p" onclick="doEditUser('${uid}')">💾 Save</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function resetPwd(uid){
+  const u=USERS_DB.find(x=>x.id===uid);if(!u)return;
+  u.password='password123';closeModal();
+  showToast(`${u.name}'s password reset to "password123"`,'info');
+}
+
+function doEditUser(uid){
+  const u=USERS_DB.find(x=>x.id===uid);if(!u)return;
+  const name=document.getElementById('e-name')?.value?.trim();
+  const email=document.getElementById('e-email')?.value?.trim().toLowerCase();
+  const phone=document.getElementById('e-phone')?.value?.trim();
+  const pass=document.getElementById('e-pass')?.value?.trim();
+  const role=document.getElementById('e-role')?.value;
+  if(!name||!email){showToast('Name and email required','error');return;}
+  if(USERS_DB.find(x=>x.email===email&&x.id!==uid)){showToast('Email already in use','error');return;}
+  u.name=name;u.email=email;u.phone=phone||u.phone;
+  if(pass&&pass.length>=6)u.password=pass;
+  if(role&&u.id!==cu().id)u.role=role;
+  if(u.vendorInfo){
+    const company=document.getElementById('e-company')?.value?.trim();
+    const area=document.getElementById('e-area')?.value?.trim();
+    const rating=parseFloat(document.getElementById('e-rating')?.value);
+    if(company)u.vendorInfo.company=company;
+    if(area)u.vendorInfo.area=area;
+    if(!isNaN(rating))u.vendorInfo.rating=rating;
+  }
+  closeModal();
+  if(u.id===cu().id){S.currentUser=u;renderSidebar();}
+  showToast(`${u.name} updated!`);renderContent();
+}
+function closeModal(){document.getElementById('modal-root').innerHTML='';}
+
+/* ══════════ PROFILE ══════════ */
+function renderProfile(){
+  const u=cu(),r=rc(u.role);
+  const myReqs=getMyRequests();
+  return`
+    <div class="ph-title" style="margin-bottom:20px">My Profile</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:800px">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+          <div style="width:64px;height:64px;border-radius:50%;background:${r.bg};color:${r.col};border:3px solid ${r.col}44;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0">${u.name[0]}</div>
+          <div>
+            <div style="font-size:20px;font-weight:800">${u.name}</div>
+            <div style="font-size:13px;color:var(--txt2)">${u.email}</div>
+            <div style="font-size:12px;color:var(--txt2);margin-top:2px">📞 ${u.phone}</div>
+            <span class="badge" style="background:${r.bg};color:${r.col};border:1px solid ${r.col}33;margin-top:7px">${r.ico} ${r.lbl}</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Joined</div><div style="font-size:13px;font-weight:600">${u.joined}</div></div>
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">My Requests</div><div style="font-size:13px;font-weight:700;color:var(--blu)">${myReqs.length}</div></div>
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Completed</div><div style="font-size:13px;font-weight:700;color:var(--grn)">${myReqs.filter(r=>r.status==='work_completed').length}</div></div>
+          <div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Status</div><span class="badge" style="background:var(--grnd);color:var(--grn);border:1px solid rgba(45,90,61,.3)">✓ Active</span></div>
+          ${u.vendorInfo?`<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Rating</div><div style="font-size:13px">⭐ ${u.vendorInfo.rating}/5</div></div><div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:3px">Jobs Done</div><div style="font-size:13px;font-weight:700;color:var(--grn)">${u.vendorInfo.jobs}</div></div>`:''}
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec">🔒 Change Password</div>
+        <div class="fld"><label>Current Password</label><input id="p-cur" type="password" placeholder="Enter current password"/></div>
+        <div class="fld"><label>New Password</label><input id="p-new" type="password" placeholder="Min. 6 characters"/></div>
+        <div class="fld"><label>Confirm New Password</label><input id="p-conf" type="password" placeholder="Repeat new password"/></div>
+        <button class="btn btn-p btn-sm" onclick="doChangePassword()">💾 Update Password</button>
+      </div>
+    </div>`;
+}
+function doChangePassword(){
+  const cur=document.getElementById('p-cur')?.value;
+  const nw=document.getElementById('p-new')?.value;
+  const conf=document.getElementById('p-conf')?.value;
+  const u=cu();
+  if(!cur||!nw||!conf){showToast('Fill all fields','error');return;}
+  if(cur!==u.password){showToast('Current password incorrect','error');return;}
+  if(nw.length<6){showToast('New password min 6 chars','error');return;}
+  if(nw!==conf){showToast('Passwords do not match','error');return;}
+  u.password=nw;
+  document.getElementById('p-cur').value='';document.getElementById('p-new').value='';document.getElementById('p-conf').value='';
+  showToast('Password updated ✅');
+}
+</script>
+</body>
+</html>

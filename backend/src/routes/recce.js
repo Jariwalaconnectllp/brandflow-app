@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const BrandingRequest = require('../models/BrandingRequest');
 const { authenticate, authorize } = require('../middleware/auth');
-const { uploadRecceImages, getFileUrl } = require('../middleware/upload');
+const { uploadRecce: uploadRecceImages, getFileUrl } = require('../middleware/upload');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 

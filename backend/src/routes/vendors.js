@@ -4,7 +4,7 @@ const BrandingRequest = require('../models/BrandingRequest');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { authenticate, authorize } = require('../middleware/auth');
-const { uploadVendorImages, getFileUrl } = require('../middleware/upload');
+const { uploadVendor: uploadVendorImages, getFileUrl } = require('../middleware/upload');
 
 // GET /api/vendors - list all vendors (MIS/Admin)
 router.get('/', authenticate, authorize('mis', 'admin'), async (req, res) => {

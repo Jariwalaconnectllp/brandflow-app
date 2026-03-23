@@ -5,7 +5,7 @@ const BrandingRequest = require('../models/BrandingRequest');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const { authenticate, authorize } = require('../middleware/auth');
-const { uploadRequestAttachments, getFileUrl } = require('../middleware/upload');
+const { uploadAttachments: uploadRequestAttachments, getFileUrl } = require('../middleware/upload');
 const { sendNotificationEmail } = require('../services/emailService');
 
 // Helper: add activity and send notifications

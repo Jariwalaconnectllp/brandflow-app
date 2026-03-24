@@ -154,7 +154,6 @@ brandingRequestSchema.index({ 'location.city': 1 });
 brandingRequestSchema.index({ createdBy: 1 });
 brandingRequestSchema.index({ assignedRecce: 1 });
 brandingRequestSchema.index({ assignedVendor: 1 });
-brandingRequestSchema.index({ requestNumber: 1 });
 brandingRequestSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('BrandingRequest', brandingRequestSchema);

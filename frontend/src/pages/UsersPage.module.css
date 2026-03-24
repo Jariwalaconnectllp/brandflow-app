@@ -1,0 +1,26 @@
+.page { display: flex; flex-direction: column; gap: 16px; max-width: 1200px; }
+.header { display: flex; justify-content: space-between; align-items: center; }
+.title { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; }
+.subtitle { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+.toolbar { display: flex; gap: 10px; }
+.searchBox { flex: 1; position: relative; display: flex; align-items: center; }
+.searchIcon { position: absolute; left: 12px; color: var(--text-muted); pointer-events: none; }
+.loadWrap { display: flex; justify-content: center; padding: 60px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+
+.userCard { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; padding: 24px 20px; }
+
+.avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700;
+  margin-bottom: 14px;
+}
+.info { width: 100%; }
+.name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.email { font-size: 12px; color: var(--text-muted); }
+.phone { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.company { font-size: 12px; color: var(--text-secondary); margin-top: 6px; font-weight: 500; }
+.rating { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.joined { font-size: 11px; color: var(--text-muted); margin-top: 12px; }

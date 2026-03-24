@@ -36,4 +36,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://brandflow-backend.onrender.com/api
+        value: https://brandflow-backend-ibgr.onrender.com/api

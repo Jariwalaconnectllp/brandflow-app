@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { Zap, Eye, EyeOff, LogIn, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, LogIn, ShieldCheck } from 'lucide-react';
 import styles from './LoginPage.module.css';
+import companyLogo from '../assets/jariwala-connect-logo.svg';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -33,11 +34,10 @@ export default function LoginPage() {
         {/* Header */}
         <div className={styles.header}>
           <div className={styles.logoWrap}>
-            <div className={styles.logoIcon}><Zap size={22} /></div>
-            <span className={styles.logoText}>BrandFlow</span>
+            <img src={companyLogo} alt="Jariwala Connect LLP" className={styles.logoImage} />
           </div>
           <h1 className={styles.title}>Welcome back</h1>
-          <p className={styles.subtitle}>Sign in to manage branding requests</p>
+          <p className={styles.subtitle}>Sign in to manage branding requests for Jariwala Connect LLP</p>
         </div>
 
         {/* Form */}

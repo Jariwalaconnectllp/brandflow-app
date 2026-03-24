@@ -24,20 +24,21 @@
   padding: 20px 16px;
   border-bottom: 1px solid var(--border);
 }
-.logoIcon {
-  width: 32px; height: 32px;
-  background: var(--accent);
+.logoImage {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
   border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: #102019;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2px;
   flex-shrink: 0;
 }
 .logoText {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.03em;
-  white-space: nowrap;
+  line-height: 1.15;
 }
 
 .userChip {

@@ -1,0 +1,25 @@
+<svg width="420" height="120" viewBox="0 0 420 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="420" height="120" rx="18" fill="#F7F5EF"/>
+  <circle cx="56" cy="60" r="34" fill="url(#paint0_linear)"/>
+  <circle cx="56" cy="60" r="24" fill="#F7F5EF"/>
+  <path d="M28 58C34 38 52 28 73 31" stroke="#F0B429" stroke-width="9" stroke-linecap="round"/>
+  <path d="M26 70C33 84 48 92 66 91" stroke="#8BC34A" stroke-width="9" stroke-linecap="round"/>
+  <path d="M39 38C52 31 67 31 81 39" stroke="#EF5350" stroke-width="9" stroke-linecap="round"/>
+  <path d="M76 45C84 52 87 63 84 74" stroke="#42A5F5" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="58" cy="60" r="7" fill="#3D3D3D"/>
+  <circle cx="77" cy="44" r="6" fill="#3D3D3D"/>
+  <circle cx="71" cy="78" r="6" fill="#3D3D3D"/>
+  <path d="M58 60L77 44" stroke="#3D3D3D" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M58 60L71 78" stroke="#3D3D3D" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="110" y="56" fill="#263238" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="1.5">JARIWALA</text>
+  <text x="111" y="84" fill="#5C5C5C" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="3">CONNECT LLP</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="22" y1="22" x2="92" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4D35E"/>
+      <stop offset="0.28" stop-color="#EF6C57"/>
+      <stop offset="0.55" stop-color="#8BC34A"/>
+      <stop offset="0.8" stop-color="#42A5F5"/>
+      <stop offset="1" stop-color="#7E57C2"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -5,9 +5,10 @@ import { ROLE_CONFIG } from '../../utils/statusHelpers';
 import api from '../../utils/api';
 import {
   LayoutDashboard, FileText, PlusCircle, Users, Bell,
-  LogOut, User, Menu, X, ChevronRight, Zap
+  LogOut, User, Menu, X, ChevronRight
 } from 'lucide-react';
 import styles from './Layout.module.css';
+import companyLogo from '../../assets/jariwala-connect-logo.svg';
 
 const NAV_ITEMS = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', exact: true },
@@ -47,8 +48,8 @@ export default function Layout() {
       <aside className={`${styles.sidebar} ${sidebarOpen ? styles.open : styles.collapsed}`}>
         {/* Logo */}
         <div className={styles.logo}>
-          <div className={styles.logoIcon}><Zap size={18} /></div>
-          {sidebarOpen && <span className={styles.logoText}>BrandFlow</span>}
+          <img src={companyLogo} alt="Jariwala Connect LLP" className={styles.logoImage} />
+          {sidebarOpen && <span className={styles.logoText}>Jariwala Connect LLP</span>}
         </div>
 
         {/* User chip */}

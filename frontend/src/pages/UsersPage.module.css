@@ -2,6 +2,12 @@
 .header { display: flex; justify-content: space-between; align-items: center; }
 .title { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; }
 .subtitle { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+.sectionTitle { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; }
+.createCard { display: flex; flex-direction: column; gap: 16px; }
+.createHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.createHint { color: var(--text-secondary); font-size: 13px; }
+.formGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.createActions { display: flex; justify-content: flex-end; }
 .toolbar { display: flex; gap: 10px; }
 .searchBox { flex: 1; position: relative; display: flex; align-items: center; }
 .searchIcon { position: absolute; left: 12px; color: var(--text-muted); pointer-events: none; }
@@ -24,3 +30,9 @@
 .company { font-size: 12px; color: var(--text-secondary); margin-top: 6px; font-weight: 500; }
 .rating { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
 .joined { font-size: 11px; color: var(--text-muted); margin-top: 12px; }
+
+@media (max-width: 768px) {
+  .toolbar { flex-direction: column; }
+  .createActions { justify-content: stretch; }
+  .createActions button { width: 100%; justify-content: center; }
+}

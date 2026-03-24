@@ -3,7 +3,11 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
 
-const USE_CLOUDINARY = process.env.NODE_ENV === 'production' && process.env.CLOUDINARY_CLOUD_NAME;
+const USE_CLOUDINARY = Boolean(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
 
 let cloudinary, CloudinaryStorage;
 if (USE_CLOUDINARY) {
@@ -59,7 +63,9 @@ function getFileUrl(file) {
   if (file.path && file.path.startsWith('http')) return file.path;
   const relative = (file.path||'').replace(/\\/g, '/');
   const idx = relative.indexOf('/uploads/');
-  return idx !== -1 ? relative.substring(idx) : `/uploads/${file.filename||file.originalname}`;
+  return idx !== -1
+    ? `/api${relative.substring(idx)}`
+    : `/api/uploads/${file.filename||file.originalname}`;
 }
 
 module.exports = { uploadRecce, uploadVendor, uploadAttachments, getFileUrl };

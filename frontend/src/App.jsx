@@ -30,7 +30,7 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={<DashboardPage />} />
         <Route path="requests" element={<RequestsPage />} />
-        <Route path="requests/new" element={<ProtectedRoute roles={['marketplace', 'admin']}><NewRequestPage /></ProtectedRoute>} />
+        <Route path="requests/new" element={<ProtectedRoute roles={['marketplace']}><NewRequestPage /></ProtectedRoute>} />
         <Route path="requests/:id" element={<RequestDetailPage />} />
         <Route path="users" element={<ProtectedRoute roles={['admin', 'mis']}><UsersPage /></ProtectedRoute>} />
         <Route path="notifications" element={<NotificationsPage />} />

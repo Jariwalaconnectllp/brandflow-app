@@ -44,7 +44,7 @@ export default function RequestsPage() {
           <h1 className={styles.title}>Branding Requests</h1>
           <p className={styles.subtitle}>{total} total requests</p>
         </div>
-        {['marketplace', 'admin'].includes(user?.role) && (
+        {user?.role === 'marketplace' && (
           <Link to="/requests/new" className="btn-primary">
             <Plus size={16} /> New Request
           </Link>

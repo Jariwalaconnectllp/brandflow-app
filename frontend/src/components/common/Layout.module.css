@@ -29,7 +29,7 @@
   background: var(--accent);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  color: #0d0f1a;
+  color: #102019;
   flex-shrink: 0;
 }
 .logoText {

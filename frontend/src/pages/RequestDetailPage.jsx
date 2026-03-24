@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../utils/api';
+import { getMediaUrl } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { StatusBadge, PriorityBadge } from '../components/common/StatusBadge';
 import WorkflowTracker from '../components/common/WorkflowTracker';
@@ -143,7 +144,7 @@ export default function RequestDetailPage() {
   const canCompleteRecce = user?.role === 'recce' && ['assigned_to_recce', 'recce_in_progress'].includes(request.status)
     && String(request.assignedRecce?._id) === String(user._id);
   const canApprove = user?.role === 'admin' && request.status === 'awaiting_approval';
-  const canAssignVendor = ['mis', 'admin'].includes(user?.role) && request.status === 'approved';
+  const canAssignVendor = user?.role === 'mis' && request.status === 'approved';
   const canStartWork = user?.role === 'vendor' && request.status === 'assigned_to_vendor';
   const canCompleteWork = user?.role === 'vendor' && ['assigned_to_vendor', 'work_in_progress'].includes(request.status);
 
@@ -194,6 +195,9 @@ export default function RequestDetailPage() {
               <label>Requirements</label>
               <p>{request.requirements}</p>
             </div>
+            {request.attachments?.length > 0 && (
+              <ImageSection title={`Reference Attachments (${request.attachments.length})`} images={request.attachments} />
+            )}
           </div>
 
           {/* Recce Details */}
@@ -213,16 +217,7 @@ export default function RequestDetailPage() {
                 </div>
               )}
               {request.recce.images?.length > 0 && (
-                <div className={styles.imageGrid}>
-                  <label style={{ display: 'block', marginBottom: 8 }}>Recce Images ({request.recce.images.length})</label>
-                  <div className={styles.images}>
-                    {request.recce.images.map((img, i) => (
-                      <a key={i} href={img.url} target="_blank" rel="noreferrer">
-                        <div className={styles.imgThumb} style={{ backgroundImage: `url(${img.url})` }} />
-                      </a>
-                    ))}
-                  </div>
-                </div>
+                <ImageSection title={`Recce Images (${request.recce.images.length})`} images={request.recce.images} />
               )}
             </div>
           )}
@@ -261,16 +256,7 @@ export default function RequestDetailPage() {
                 <div className={styles.requirements}><label>Notes</label><p>{request.vendorWork.notes}</p></div>
               )}
               {request.vendorWork.images?.length > 0 && (
-                <div className={styles.imageGrid}>
-                  <label style={{ display: 'block', marginBottom: 8 }}>Final Images ({request.vendorWork.images.length})</label>
-                  <div className={styles.images}>
-                    {request.vendorWork.images.map((img, i) => (
-                      <a key={i} href={img.url} target="_blank" rel="noreferrer">
-                        <div className={styles.imgThumb} style={{ backgroundImage: `url(${img.url})` }} />
-                      </a>
-                    ))}
-                  </div>
-                </div>
+                <ImageSection title={`Final Images (${request.vendorWork.images.length})`} images={request.vendorWork.images} />
               )}
             </div>
           )}
@@ -511,6 +497,27 @@ function AssignRow({ label, user, color }) {
       <div>
         <p style={{ fontSize: 13, fontWeight: 500 }}>{user.name}</p>
         <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{label}</p>
+      </div>
+    </div>
+  );
+}
+
+function ImageSection({ title, images }) {
+  return (
+    <div className={styles.imageGrid}>
+      <label className={styles.imageLabel}>{title}</label>
+      <div className={styles.images}>
+        {images.map((img, i) => {
+          const mediaUrl = getMediaUrl(img.url);
+          return (
+            <a key={i} href={mediaUrl} target="_blank" rel="noreferrer" className={styles.imageLink}>
+              <div className={styles.imgThumb}>
+                <img src={mediaUrl} alt={img.caption || `Image ${i + 1}`} className={styles.imgTag} />
+              </div>
+              <span className={styles.imageCaption}>{img.caption || `Image ${i + 1}`}</span>
+            </a>
+          );
+        })}
       </div>
     </div>
   );

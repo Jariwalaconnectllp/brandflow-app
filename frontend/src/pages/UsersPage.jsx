@@ -1,18 +1,40 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 import { ROLE_CONFIG } from '../utils/statusHelpers';
-import { Users, Search } from 'lucide-react';
+import { Users, Search, UserPlus } from 'lucide-react';
 import { format } from 'date-fns';
+import toast from 'react-hot-toast';
 import styles from './UsersPage.module.css';
 
 export default function UsersPage() {
+  const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'marketplace',
+    phone: '',
+    vendorDetails: { companyName: '' }
+  });
+
+  const loadUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get('/users');
+      setUsers(res.data.users);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    api.get('/users').then(res => setUsers(res.data.users)).finally(() => setLoading(false));
+    loadUsers();
   }, []);
 
   const filtered = users.filter(u => {
@@ -20,6 +42,42 @@ export default function UsersPage() {
     const matchRole = !roleFilter || u.role === roleFilter;
     return matchSearch && matchRole;
   });
+
+  const isAdmin = user?.role === 'admin';
+
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const payload = {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+        phone: form.phone
+      };
+
+      if (form.role === 'vendor' && form.vendorDetails.companyName.trim()) {
+        payload.vendorDetails = { companyName: form.vendorDetails.companyName.trim() };
+      }
+
+      await api.post('/auth/register', payload);
+      toast.success('User created successfully');
+      setForm({
+        name: '',
+        email: '',
+        password: '',
+        role: 'marketplace',
+        phone: '',
+        vendorDetails: { companyName: '' }
+      });
+      await loadUsers();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to create user');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -29,6 +87,52 @@ export default function UsersPage() {
           <p className={styles.subtitle}>{users.length} total members</p>
         </div>
       </div>
+
+      {isAdmin && (
+        <form className={`card ${styles.createCard}`} onSubmit={handleCreateUser}>
+          <div className={styles.createHeader}>
+            <h2 className={styles.sectionTitle}><UserPlus size={16} /> Create Team User</h2>
+            <p className={styles.createHint}>Add Marketplace, MIS, Recce, Vendor, or Admin accounts.</p>
+          </div>
+          <div className={styles.formGrid}>
+            <div>
+              <label>Name</label>
+              <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
+            </div>
+            <div>
+              <label>Email</label>
+              <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} required />
+            </div>
+            <div>
+              <label>Password</label>
+              <input type="password" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} minLength={6} required />
+            </div>
+            <div>
+              <label>Role</label>
+              <select value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))}>
+                {Object.entries(ROLE_CONFIG).map(([key, value]) => (
+                  <option key={key} value={key}>{value.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label>Phone</label>
+              <input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+            </div>
+            {form.role === 'vendor' && (
+              <div>
+                <label>Vendor Company</label>
+                <input value={form.vendorDetails.companyName} onChange={e => setForm(f => ({ ...f, vendorDetails: { ...f.vendorDetails, companyName: e.target.value } }))} />
+              </div>
+            )}
+          </div>
+          <div className={styles.createActions}>
+            <button type="submit" className="btn-primary" disabled={saving}>
+              {saving ? <div className="spinner" style={{ width: 16, height: 16 }} /> : <><UserPlus size={16} /> Create User</>}
+            </button>
+          </div>
+        </form>
+      )}
 
       <div className={styles.toolbar}>
         <div className={styles.searchBox}>

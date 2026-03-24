@@ -31,17 +31,36 @@
 .requirements p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 
 .imageGrid { margin-top: 14px; }
+.imageLabel { display: block; margin-bottom: 8px; }
 .images { display: flex; flex-wrap: wrap; gap: 8px; }
+.imageLink {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 96px;
+}
 .imgThumb {
   width: 80px; height: 80px;
   border-radius: var(--radius-md);
-  background-size: cover; background-position: center;
   border: 1px solid var(--border);
   transition: transform 0.2s;
   cursor: pointer;
   background-color: var(--bg-secondary);
+  overflow: hidden;
 }
 .imgThumb:hover { transform: scale(1.05); border-color: var(--accent); }
+.imgTag {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.imageCaption {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  word-break: break-word;
+}
 
 .approvalBtns { display: flex; gap: 10px; }
 .decisionBtn {

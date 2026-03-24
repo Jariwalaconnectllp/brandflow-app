@@ -2,16 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { Zap, Eye, EyeOff, LogIn } from 'lucide-react';
+import { Zap, Eye, EyeOff, LogIn, ShieldCheck } from 'lucide-react';
 import styles from './LoginPage.module.css';
-
-const DEMO_ACCOUNTS = [
-  { role: 'Admin',       email: 'admin@branding.com',       label: 'Admin' },
-  { role: 'Marketplace', email: 'marketplace@branding.com', label: 'Marketplace' },
-  { role: 'MIS',         email: 'mis@branding.com',         label: 'MIS Team' },
-  { role: 'Recce',       email: 'recce@branding.com',       label: 'Recce Team' },
-  { role: 'Vendor',      email: 'vendor@branding.com',      label: 'Vendor' },
-];
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -29,20 +21,6 @@ export default function LoginPage() {
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed. Check credentials.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const quickLogin = async (email) => {
-    setForm({ email, password: 'password123' });
-    setLoading(true);
-    try {
-      await login(email, 'password123');
-      toast.success('Logged in!');
-      navigate('/');
-    } catch (err) {
-      toast.error('Quick login failed');
     } finally {
       setLoading(false);
     }
@@ -88,17 +66,16 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Demo accounts */}
-        <div className={styles.demo}>
-          <p className={styles.demoLabel}>Quick Demo Login</p>
-          <div className={styles.demoGrid}>
-            {DEMO_ACCOUNTS.map(acc => (
-              <button key={acc.email} className={styles.demoBtn} onClick={() => quickLogin(acc.email)} disabled={loading}>
-                {acc.label}
-              </button>
-            ))}
+        <div className={styles.securityNote}>
+          <div className={styles.securityIcon}>
+            <ShieldCheck size={16} />
           </div>
-          <p className={styles.demoHint}>All use password: <code>password123</code></p>
+          <div>
+            <p className={styles.securityTitle}>Secure sign-in only</p>
+            <p className={styles.securityText}>
+              Demo shortcuts and exposed default credentials have been removed. Use your assigned account credentials to continue.
+            </p>
+          </div>
         </div>
       </div>
     </div>

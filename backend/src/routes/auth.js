@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, authorize } = require('../middleware/auth');
 
 const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
   expiresIn: process.env.JWT_EXPIRES_IN || '7d'
@@ -36,8 +36,8 @@ router.post('/login', [
   });
 });
 
-// POST /api/auth/register (admin only in production)
-router.post('/register', [
+// POST /api/auth/register
+router.post('/register', authenticate, authorize('admin'), [
   body('name').notEmpty().trim(),
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 6 }),
@@ -53,10 +53,7 @@ router.post('/register', [
 
   const user = await User.create({ name, email, password, role, phone, vendorDetails });
 
-  res.status(201).json({
-    token: generateToken(user._id),
-    user: user.toJSON()
-  });
+  res.status(201).json({ user: user.toJSON() });
 });
 
 // GET /api/auth/me

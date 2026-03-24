@@ -1,5 +1,4 @@
 services:
-  # ── Backend API ──────────────────────────────────────
   - type: web
     name: brandflow-backend
     runtime: node
@@ -11,17 +10,20 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        fromDatabase:
-          name: brandflow-mongodb
-          property: connectionString
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://brandflow-frontend.onrender.com   # ← update after first deploy
+        value: https://brandflow-frontend.onrender.com
       - key: PORT
         value: 10000
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
 
-  # ── Frontend Static Site ─────────────────────────────
   - type: web
     name: brandflow-frontend
     runtime: static
@@ -34,9 +36,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://brandflow-backend.onrender.com/api  # ← update after first deploy
-
-databases:
-  - name: brandflow-mongodb
-    plan: free
-    databaseName: branding_system
+        value: https://brandflow-backend.onrender.com/api

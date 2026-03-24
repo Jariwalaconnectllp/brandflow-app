@@ -9,6 +9,23 @@ const api = axios.create({
   timeout: 30000
 });
 
+const absoluteBaseURL = typeof window !== 'undefined'
+  ? new URL(baseURL, window.location.origin).toString()
+  : baseURL;
+
+export const mediaBaseURL = absoluteBaseURL.endsWith('/api')
+  ? absoluteBaseURL.slice(0, -4)
+  : absoluteBaseURL;
+
+export function getMediaUrl(path) {
+  if (!path) return '';
+  if (/^https?:\/\//i.test(path)) return path;
+  const normalizedPath = path.startsWith('/uploads/')
+    ? `/api${path}`
+    : path;
+  return new URL(normalizedPath, `${mediaBaseURL}/`).toString();
+}
+
 // Attach JWT token on every request
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');

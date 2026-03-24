@@ -176,7 +176,7 @@ export default function NewRequestPage() {
           </div>
 
           {/* Summary card */}
-          <div className="card" style={{ background: 'var(--accent-dim)', border: '1px solid rgba(232,197,71,0.2)' }}>
+          <div className="card" style={{ background: 'var(--accent-dim)', border: '1px solid rgba(199,182,255,0.24)' }}>
             <h3 style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)', marginBottom: 12 }}>📋 Workflow Overview</h3>
             {[
               { step: 1, label: 'MIS Team reviews & assigns to Recce' },
@@ -185,7 +185,7 @@ export default function NewRequestPage() {
               { step: 4, label: 'Vendor executes & uploads completion' },
             ].map(({ step, label }) => (
               <div key={step} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 10 }}>
-                <span style={{ background: 'var(--accent)', color: '#0d0f1a', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, flexShrink: 0 }}>{step}</span>
+                <span style={{ background: 'var(--accent)', color: '#102019', width: 20, height: 20, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, flexShrink: 0 }}>{step}</span>
                 <span style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.4 }}>{label}</span>
               </div>
             ))}

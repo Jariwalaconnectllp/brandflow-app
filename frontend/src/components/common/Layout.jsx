@@ -12,7 +12,7 @@ import styles from './Layout.module.css';
 const NAV_ITEMS = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', exact: true },
   { to: '/requests', icon: FileText, label: 'Requests' },
-  { to: '/requests/new', icon: PlusCircle, label: 'New Request', roles: ['marketplace', 'admin'] },
+  { to: '/requests/new', icon: PlusCircle, label: 'New Request', roles: ['marketplace'] },
   { to: '/users', icon: Users, label: 'Team', roles: ['admin', 'mis'] },
   { to: '/notifications', icon: Bell, label: 'Notifications' },
   { to: '/profile', icon: User, label: 'Profile' },

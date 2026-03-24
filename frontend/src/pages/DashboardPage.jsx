@@ -4,15 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { StatusBadge, PriorityBadge } from '../components/common/StatusBadge';
 import { formatCurrency, STATUS_CONFIG } from '../utils/statusHelpers';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { formatDistanceToNow } from 'date-fns';
 import {
   FileText, Clock, CheckCircle, AlertTriangle, TrendingUp,
   ArrowRight, MapPin, Calendar, Users
 } from 'lucide-react';
 import styles from './DashboardPage.module.css';
-
-const CHART_COLORS = ['#8890b5','#4f8ef7','#f6ad55','#b794f4','#e8c547','#3ecf8e','#f56565','#4fd1c5','#f6ad55','#3ecf8e'];
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -30,8 +27,9 @@ export default function DashboardPage() {
   const statusChartData = Object.entries(data?.statusCounts || {}).map(([status, count]) => ({
     name: STATUS_CONFIG[status]?.label || status,
     count,
-    color: STATUS_CONFIG[status]?.color || '#8890b5'
+    color: STATUS_CONFIG[status]?.color || '#758780'
   })).sort((a, b) => b.count - a.count);
+  const maxStatusCount = Math.max(...statusChartData.map(item => item.count), 1);
 
   const kpis = data?.kpis || {};
   const sla = data?.sla || {};
@@ -75,19 +73,22 @@ export default function DashboardPage() {
         {statusChartData.length > 0 && (
           <div className="card" style={{ padding: 24 }}>
             <h2 className={styles.sectionTitle}>Requests by Status</h2>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={statusChartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                <XAxis dataKey="name" tick={{ fill: '#5a6080', fontSize: 10 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#5a6080', fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                <Tooltip
-                  contentStyle={{ background: '#181c35', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, color: '#f0f2ff', fontSize: 13 }}
-                  cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-                />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                  {statusChartData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className={styles.chartList}>
+              {statusChartData.map((entry) => (
+                <div key={entry.name} className={styles.chartRow}>
+                  <div className={styles.chartMeta}>
+                    <span className={styles.chartLabel}>{entry.name}</span>
+                    <span className={styles.chartValue}>{entry.count}</span>
+                  </div>
+                  <div className={styles.chartTrack}>
+                    <div
+                      className={styles.chartBar}
+                      style={{ width: `${Math.max((entry.count / maxStatusCount) * 100, 8)}%`, background: entry.color }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

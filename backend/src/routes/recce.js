@@ -6,6 +6,7 @@ const { uploadRecce, getFileUrl } = require('../middleware/upload');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 
+// PUT /api/recce/:requestId/update - Recce team updates site inspection
 router.put('/:requestId/update', authenticate, authorize('recce', 'admin'),
   uploadRecce.array('images', 10),
   async (req, res) => {
@@ -14,10 +15,14 @@ router.put('/:requestId/update', authenticate, authorize('recce', 'admin'),
     if (String(request.assignedRecce) !== String(req.user._id) && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Not assigned to this request' });
     }
+
     const { notes, estimatedCost, siteCondition, feasibility } = req.body;
+
     if (request.status === 'assigned_to_recce') {
       request.status = 'recce_in_progress';
+      request.sla.assignedToRecceAt = request.sla.assignedToRecceAt || new Date();
     }
+
     request.recce = {
       ...request.recce,
       notes: notes || request.recce?.notes,
@@ -25,23 +30,32 @@ router.put('/:requestId/update', authenticate, authorize('recce', 'admin'),
       siteCondition: siteCondition || request.recce?.siteCondition,
       feasibility: feasibility || request.recce?.feasibility
     };
+
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map(f => ({
-        url: getFileUrl(f), key: f.key || f.filename,
-        caption: f.originalname, uploadedBy: req.user._id
+        url: getFileUrl(f),
+        key: f.key || f.filename,
+        caption: f.originalname,
+        uploadedBy: req.user._id
       }));
       request.recce.images = [...(request.recce.images || []), ...newImages];
     }
+
     request.activities.push({
-      action: 'Recce progress updated', performedBy: req.user._id,
-      performedByName: req.user.name, performedByRole: req.user.role,
-      toStatus: request.status, timestamp: new Date()
+      action: 'Recce progress updated',
+      performedBy: req.user._id,
+      performedByName: req.user.name,
+      performedByRole: req.user.role,
+      toStatus: request.status,
+      timestamp: new Date()
     });
+
     await request.save();
     res.json({ request, message: 'Recce updated successfully' });
   }
 );
 
+// PUT /api/recce/:requestId/complete - Recce team submits final report
 router.put('/:requestId/complete', authenticate, authorize('recce', 'admin'),
   uploadRecce.array('images', 10),
   async (req, res) => {
@@ -50,16 +64,20 @@ router.put('/:requestId/complete', authenticate, authorize('recce', 'admin'),
     if (!['assigned_to_recce', 'recce_in_progress'].includes(request.status)) {
       return res.status(400).json({ error: 'Invalid status for recce completion' });
     }
+
     const { notes, estimatedCost, siteCondition, feasibility } = req.body;
     if (!estimatedCost) return res.status(400).json({ error: 'Estimated cost is required' });
+
     const fromStatus = request.status;
     request.status = 'awaiting_approval';
     request.recce = {
       notes, estimatedCost: parseFloat(estimatedCost),
-      siteCondition, feasibility, completedAt: new Date(),
+      siteCondition, feasibility,
+      completedAt: new Date(),
       images: request.recce?.images || []
     };
     request.sla.recceCompletedAt = new Date();
+
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map(f => ({
         url: getFileUrl(f), key: f.key || f.filename,
@@ -67,18 +85,26 @@ router.put('/:requestId/complete', authenticate, authorize('recce', 'admin'),
       }));
       request.recce.images = [...request.recce.images, ...newImages];
     }
+
     request.activities.push({
-      action: 'Recce completed - submitted for approval', performedBy: req.user._id,
-      performedByName: req.user.name, performedByRole: req.user.role,
-      fromStatus, toStatus: 'awaiting_approval', timestamp: new Date()
+      action: 'Recce completed - submitted for approval',
+      performedBy: req.user._id,
+      performedByName: req.user.name,
+      performedByRole: req.user.role,
+      fromStatus, toStatus: 'awaiting_approval',
+      timestamp: new Date()
     });
+
+    // Notify admins
     const admins = await User.find({ role: 'admin', isActive: true }).select('_id');
     await Notification.insertMany(admins.map(a => ({
-      recipient: a._id, type: 'recce_completed',
+      recipient: a._id,
+      type: 'recce_completed',
       title: `Recce Completed: ${request.requestNumber}`,
       message: `Site inspection completed. Estimated cost: ₹${estimatedCost}. Awaiting your approval.`,
       relatedRequest: request._id
     })));
+
     await request.save();
     res.json({ request, message: 'Recce submitted for approval' });
   }

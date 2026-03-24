@@ -3,31 +3,54 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const BrandingRequest = require('../models/BrandingRequest');
 
-const seed = async () => {
-  await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/branding_system');
-  console.log('Connected to MongoDB');
+const DEMO_USERS = [
+  { name: 'Admin User', email: 'admin@branding.com', password: 'password123', role: 'admin', phone: '9000000001' },
+  { name: 'Priya Sharma', email: 'marketplace@branding.com', password: 'password123', role: 'marketplace', phone: '9000000002' },
+  { name: 'Rahul Verma', email: 'mis@branding.com', password: 'password123', role: 'mis', phone: '9000000003' },
+  { name: 'Amit Singh', email: 'recce@branding.com', password: 'password123', role: 'recce', phone: '9000000004' },
+  {
+    name: 'FastPrint Vendors',
+    email: 'vendor@branding.com',
+    password: 'password123',
+    role: 'vendor',
+    phone: '9000000005',
+    vendorDetails: { companyName: 'FastPrint Solutions', serviceArea: ['Surat', 'Ahmedabad'], rating: 4.5, completedJobs: 23 }
+  }
+];
 
-  // Clear existing data
-  await User.deleteMany({});
-  await BrandingRequest.deleteMany({});
+async function ensureUser(userData) {
+  let user = await User.findOne({ email: userData.email });
 
-  // Create users
-  const users = await User.create([
-    { name: 'Admin User', email: 'admin@branding.com', password: 'password123', role: 'admin', phone: '9000000001' },
-    { name: 'Priya Sharma', email: 'marketplace@branding.com', password: 'password123', role: 'marketplace', phone: '9000000002' },
-    { name: 'Rahul Verma', email: 'mis@branding.com', password: 'password123', role: 'mis', phone: '9000000003' },
-    { name: 'Amit Singh', email: 'recce@branding.com', password: 'password123', role: 'recce', phone: '9000000004' },
-    {
-      name: 'FastPrint Vendors', email: 'vendor@branding.com', password: 'password123', role: 'vendor', phone: '9000000005',
-      vendorDetails: { companyName: 'FastPrint Solutions', serviceArea: ['Surat', 'Ahmedabad'], rating: 4.5, completedJobs: 23 }
-    }
-  ]);
+  if (!user) {
+    user = await User.create(userData);
+    console.log(`Created ${userData.role}: ${userData.email} / password123`);
+    return user;
+  }
 
-  console.log('✅ Users created:');
-  users.forEach(u => console.log(`  ${u.role}: ${u.email} / password123`));
+  user.name = userData.name;
+  user.role = userData.role;
+  user.phone = userData.phone;
+  user.isActive = true;
+  user.vendorDetails = userData.vendorDetails || user.vendorDetails;
+  user.password = userData.password;
+  await user.save();
 
-  // Create sample requests
-  const [admin, marketplace, mis, recce, vendor] = users;
+  console.log(`Updated ${userData.role}: ${userData.email} / password123`);
+  return user;
+}
+
+async function ensureSampleRequests(usersByRole) {
+  const existingCount = await BrandingRequest.countDocuments();
+  if (existingCount > 0) {
+    console.log(`Skipped sample requests: ${existingCount} request(s) already exist`);
+    return;
+  }
+
+  const admin = usersByRole.admin;
+  const marketplace = usersByRole.marketplace;
+  const mis = usersByRole.mis;
+  const recce = usersByRole.recce;
+  const vendor = usersByRole.vendor;
 
   const req1 = new BrandingRequest({
     title: 'Hoarding at Ring Road Junction',
@@ -53,8 +76,11 @@ const seed = async () => {
       { action: 'Recce completed - submitted for approval', performedBy: recce._id, performedByName: recce.name, performedByRole: 'recce', fromStatus: 'recce_in_progress', toStatus: 'awaiting_approval', timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) }
     ]
   });
-  req1.sla = { createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), assignedToRecceAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), recceCompletedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) };
-  await req1.save();
+  req1.sla = {
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    assignedToRecceAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+    recceCompletedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+  };
 
   const req2 = new BrandingRequest({
     title: 'LED Signage for Mall Entrance',
@@ -71,8 +97,10 @@ const seed = async () => {
       { action: 'Assigned to Recce Team', performedBy: mis._id, performedByName: mis.name, performedByRole: 'mis', fromStatus: 'created', toStatus: 'assigned_to_recce', timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000) }
     ]
   });
-  req2.sla = { createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), assignedToRecceAt: new Date(Date.now() - 6 * 60 * 60 * 1000) };
-  await req2.save();
+  req2.sla = {
+    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+    assignedToRecceAt: new Date(Date.now() - 6 * 60 * 60 * 1000)
+  };
 
   const req3 = new BrandingRequest({
     title: 'Wall Painting - Citylight',
@@ -97,11 +125,32 @@ const seed = async () => {
       { action: 'Work completed', performedBy: vendor._id, performedByName: vendor.name, performedByRole: 'vendor', fromStatus: 'work_in_progress', toStatus: 'work_completed', timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) }
     ]
   });
-  req3.sla = { createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000), assignedToRecceAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000), recceCompletedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), approvalDecisionAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000), assignedToVendorAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), workCompletedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) };
-  await req3.save();
+  req3.sla = {
+    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+    assignedToRecceAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
+    recceCompletedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+    approvalDecisionAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+    assignedToVendorAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    workCompletedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+  };
 
-  console.log('\n✅ Sample requests created');
-  console.log('\n🚀 Seed complete! Login credentials:');
+  await BrandingRequest.insertMany([req1, req2, req3]);
+  console.log('Created sample requests');
+}
+
+async function seed() {
+  await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/branding_system');
+  console.log('Connected to MongoDB');
+
+  const users = [];
+  for (const userData of DEMO_USERS) {
+    users.push(await ensureUser(userData));
+  }
+
+  const usersByRole = Object.fromEntries(users.map((user) => [user.role, user]));
+  await ensureSampleRequests(usersByRole);
+
+  console.log('\nSeed complete. Demo credentials:');
   console.log('  Admin:       admin@branding.com / password123');
   console.log('  Marketplace: marketplace@branding.com / password123');
   console.log('  MIS:         mis@branding.com / password123');
@@ -109,6 +158,9 @@ const seed = async () => {
   console.log('  Vendor:      vendor@branding.com / password123\n');
 
   await mongoose.disconnect();
-};
+}
 
-seed().catch(err => { console.error(err); process.exit(1); });
+seed().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
